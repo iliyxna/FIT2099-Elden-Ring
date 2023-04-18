@@ -1,4 +1,4 @@
-package game;
+package game.utils;
 
 /**
  * Use this enum class to give `buff` or `debuff`.
