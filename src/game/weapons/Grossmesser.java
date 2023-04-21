@@ -9,4 +9,6 @@ public class Grossmesser extends WeaponItem {
     public Grossmesser() {
         super("Grossmesser",'?',115,"hits", 85);
     }
+
+
 }

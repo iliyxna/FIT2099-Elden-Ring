@@ -12,7 +12,8 @@ public class GiantCrab extends Enemy{
      * Constructor.
      */
     public GiantCrab() {
-        super("Giant Crab", 'C', 407);
+        super("Giant Crab", 'C', 407,
+                318,4961);
     }
 
     @Override

@@ -14,14 +14,13 @@ public class PileOfBones extends Actor {
 
     private int counter;
 
-    private Location location;
     /**
      * Constructor.
      */
-    public PileOfBones(Location loc) {
+    public PileOfBones() {
         super("Pile of Bones",'X',1);
         this.addWeaponToInventory(new Grossmesser());
-        this.location = loc;
+        this.addCapability(Status.HEAVY_SKELETAL_SWORDSMAN);
         counter = 0;
     }
 
@@ -29,9 +28,16 @@ public class PileOfBones extends Actor {
 
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        if (counter == 3 && this.isConscious()){
+
+        Location pos = map.locationOf(this);
+
+        if(!this.isConscious()){
             map.removeActor(this);
-            map.addActor(new HeavySkeletalSwordsman(), location);
+
+
+        }else if (counter == 3 && this.isConscious()){
+            map.removeActor(this);
+            map.addActor(new HeavySkeletalSwordsman(), pos);
         }
 
         counter += 1;

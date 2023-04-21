@@ -15,6 +15,7 @@ import game.behaviours.WanderBehaviour;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * BEHOLD, DOG!
@@ -25,13 +26,11 @@ import java.util.Map;
  *
  */
 public class LoneWolf extends Enemy {
-//    private Map<Integer, Behaviour> behaviours = new HashMap<>();
+
 
     public LoneWolf() {
-        super("Lone Wolf", 'h', 102);
-
+        super("Lone Wolf", 'h', 102, 55, 1470);
         this.addCapability(Status.LONE_WOLF);
-//        this.behaviours.put(999, new WanderBehaviour());
     }
 
     /**
@@ -46,15 +45,19 @@ public class LoneWolf extends Enemy {
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
 
+        boolean following;
         // added getBehaviour()
         for (Behaviour behaviour : this.getBehaviours().values()) {
+
             Action action = behaviour.getAction(this, map);
 
-            // de-spawn if not following player
-//            if(Math.random() <= 0.1 && !action.equals(new FollowBehaviour(player))){
+//            // de-spawn if not following player
+//            if(Math.random() <= 0.1 && !following){
 //                map.removeActor(this);
+//                System.out.println("Lone wolf removed");
 //                return new DoNothingAction();
 //            }
+
             if(action != null)
                 return action;
         }
@@ -62,7 +65,7 @@ public class LoneWolf extends Enemy {
     }
 
     /**
-     * The lone wolf can be attacked by any actor that has the HOSTILE_TO_ENEMY capability
+     * The lone wolf can be attacked by any actor that does not have the LONE_WOLF capability
      *
      * @param otherActor the Actor that might be performing attack
      * @param direction  String representing the direction of the other Actor
@@ -86,4 +89,5 @@ public class LoneWolf extends Enemy {
     public IntrinsicWeapon getIntrinsicWeapon() {
         return new IntrinsicWeapon(97, "bites", 95);
     }
+
 }
