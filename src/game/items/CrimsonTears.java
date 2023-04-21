@@ -1,11 +1,11 @@
 package game.items;
 
-public class FlaskOfCrimsonTears {
+public class CrimsonTears {
     private int usesLeft;
     private final int MAX_USES = 2;
     private final int HEAL_AMOUNT = 250;
 
-    public FlaskOfCrimsonTears() {
+    public CrimsonTears() {
         usesLeft = MAX_USES;
     }
 
