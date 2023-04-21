@@ -8,5 +8,9 @@ package game.utils;
 public enum Status {
     HOSTILE_TO_ENEMY,
     RESPAWNABLE,
-    RESTING
+    RESTING,
+    LONE_WOLF,
+    GIANT_CRAB,
+    HEAVY_SKELETAL_SWORDSMAN
+
 }

@@ -9,6 +9,7 @@ import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.actions.AttackAction;
 import game.behaviours.Behaviour;
+import game.behaviours.FollowBehaviour;
 import game.utils.Status;
 import game.behaviours.WanderBehaviour;
 
@@ -23,12 +24,14 @@ import java.util.Map;
  * Modified by:
  *
  */
-public class LoneWolf extends Actor {
-    private Map<Integer, Behaviour> behaviours = new HashMap<>();
+public class LoneWolf extends Enemy {
+//    private Map<Integer, Behaviour> behaviours = new HashMap<>();
 
     public LoneWolf() {
         super("Lone Wolf", 'h', 102);
-        this.behaviours.put(999, new WanderBehaviour());
+
+        this.addCapability(Status.LONE_WOLF);
+//        this.behaviours.put(999, new WanderBehaviour());
     }
 
     /**
@@ -42,8 +45,16 @@ public class LoneWolf extends Actor {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        for (Behaviour behaviour : behaviours.values()) {
+
+        // added getBehaviour()
+        for (Behaviour behaviour : this.getBehaviours().values()) {
             Action action = behaviour.getAction(this, map);
+
+            // de-spawn if not following player
+//            if(Math.random() <= 0.1 && !action.equals(new FollowBehaviour(player))){
+//                map.removeActor(this);
+//                return new DoNothingAction();
+//            }
             if(action != null)
                 return action;
         }
@@ -61,9 +72,10 @@ public class LoneWolf extends Actor {
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
-        if(otherActor.hasCapability(Status.HOSTILE_TO_ENEMY)){
+        //otherActor.hasCapability(Status.HOSTILE_TO_ENEMY)
+        if(!otherActor.hasCapability(Status.LONE_WOLF)){
             actions.add(new AttackAction(this, direction));
-            // HINT 1: The AttackAction above allows you to attak the enemy with your intrinsic weapon.
+            // HINT 1: The AttackAction above allows you to attack the enemy with your intrinsic weapon.
             // HINT 1: How would you attack the enemy with a weapon?
         }
         return actions;
