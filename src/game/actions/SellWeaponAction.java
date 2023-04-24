@@ -45,7 +45,7 @@ public class SellWeaponAction extends Action {
 
     @Override
     public String menuDescription(Actor actor) {
-        return actor.toString() + " sold " + weapon.toString() +  "for $" + weapon.getSellPrice();
+        return "Sell Weapon: " + weapon.toString() +  "for $" + weapon.getSellPrice() + " to Merchant Kale";
     }
 
 }

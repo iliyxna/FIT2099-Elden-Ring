@@ -35,17 +35,20 @@ public class Trader extends Actor {
     private Location traderLocation;
 
     /**
-     * Constructor.
-     *
-     * @param name        the name of the Actor
-     * @param displayChar the character that will represent the Actor in the display
-     * @param hitPoints   the Actor's starting hit points
+     * Constructor for Trader class.
      */
-    public Trader(String name, char displayChar, int hitPoints) {
-        super(name, displayChar, hitPoints);
-        addCapability(Status.UNATTACKABLE);
+    public Trader() {
+        super("Merchant Kale", 'K', 0);
+        addCapability(Status.CAN_ENTER_FLOOR);
     }
 
+    /**
+     * Returns a collection of Action that the otherActor can do to the Trader
+     * @param otherActor the Actor that may be making transaction with Trader
+     * @param direction  String representing the direction of the other Actor
+     * @param map        current GameMap
+     * @return
+     */
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map){
         ActionList actionList = new ActionList();
@@ -61,7 +64,8 @@ public class Trader extends Actor {
         actionList.add(new SellWeaponAction(new Uchigatana()));
         actionList.add(new SellWeaponAction(new Grossmesser()));
 
-        System.out.println("Player's rune value: " + player.getTotalRunes());
+        // Display number of runes player is holding
+        System.out.println("Player's rune value: $" + player.getTotalRunes());
         return actionList;
     }
 

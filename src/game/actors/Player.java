@@ -6,6 +6,7 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.displays.Menu;
+import game.rune.Rune;
 import game.weapons.Club;
 import game.reset.Resettable;
 import game.utils.Status;
@@ -22,6 +23,9 @@ public class Player extends Actor implements Resettable {
 
 	private final Menu menu = new Menu();
 
+	// player's runes
+	private Rune totalRunes = new Rune(0);
+
 	/**
 	 * Constructor.
 	 *
@@ -32,6 +36,8 @@ public class Player extends Actor implements Resettable {
 	public Player(String name, char displayChar, int hitPoints) {
 		super(name, displayChar, hitPoints);
 		this.addCapability(Status.HOSTILE_TO_ENEMY);
+		this.addCapability(Status.PLAYER);
+		this.addCapability(Status.CAN_ENTER_FLOOR);
 		this.addWeaponToInventory(new Club());
 	}
 
@@ -47,4 +53,30 @@ public class Player extends Actor implements Resettable {
 
 	@Override
 	public void reset() {}
+
+	/**
+	 * Getter method to retrieve the total runes owned by the player.
+	 * @return total runes owned by player
+	 */
+	public Rune getTotalRunes() {
+		return totalRunes;
+	}
+
+	/**
+	 * Setter method to set the new rune value the player has.
+	 * @param totalRunes the total runes owned by player
+	 */
+	public void setTotalRunes(int totalRunes) {
+		this.totalRunes.setRuneValue(totalRunes);
+	}
+
+	public void addRunes(int value){
+		int newValue = totalRunes.getRuneValue() + value;
+		setTotalRunes(newValue);
+	}
+
+	public void subtractRunes(int value){
+		int newValue = totalRunes.getRuneValue() - value;
+		setTotalRunes(newValue);
+	}
 }
