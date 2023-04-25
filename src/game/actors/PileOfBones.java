@@ -2,6 +2,7 @@ package game.actors;
 
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actions.ActionList;
+import edu.monash.fit2099.engine.actions.DoNothingAction;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
@@ -21,7 +22,7 @@ public class PileOfBones extends Actor {
         super("Pile of Bones",'X',1);
         this.addWeaponToInventory(new Grossmesser());
         this.addCapability(Status.HEAVY_SKELETAL_SWORDSMAN);
-        counter = 0;
+        counter = 1;
     }
 
 
@@ -33,15 +34,15 @@ public class PileOfBones extends Actor {
 
         if(!this.isConscious()){
             map.removeActor(this);
-
-
+            return new DoNothingAction();
         }else if (counter == 3 && this.isConscious()){
             map.removeActor(this);
             map.addActor(new HeavySkeletalSwordsman(), pos);
+            return new DoNothingAction();
         }
 
         counter += 1;
-        return null;
+        return new DoNothingAction();
     }
 
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {

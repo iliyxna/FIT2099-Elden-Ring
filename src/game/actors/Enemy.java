@@ -44,7 +44,7 @@ public abstract class Enemy extends Actor {
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
         if(otherActor.hasCapability(Status.HOSTILE_TO_ENEMY)){
-            if (!isFollowingPlayer){
+            if (isFollowingPlayer){
                 addBehaviour(998, new FollowBehaviour(otherActor));
                 isFollowingPlayer = true;
             }

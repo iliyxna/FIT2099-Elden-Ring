@@ -4,8 +4,11 @@ import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.FancyGroundFactory;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.World;
+import game.actors.HeavySkeletalSwordsman;
 import game.actors.LoneWolf;
+import game.actors.PileOfBones;
 import game.actors.Player;
+import game.behaviours.FollowBehaviour;
 import game.environments.*;
 import game.utils.FancyMessage;
 
@@ -38,8 +41,8 @@ public class Application {
 				"......................#...........###......................................",
 				"...........................................................................",
 				"...........................................................~...............",
-				"...........n......................###___###................................",
-				"..................................________#................................",
+				"..................................###___###................................",
+				"............................n.....________#................................",
 				"..................................#________................................",
 				"..................................#_______#................&...............",
 				"..................................###___###................................",
@@ -71,8 +74,10 @@ public class Application {
 
 		// HINT: what does it mean to prefer composition to inheritance?
 		Player player = new Player("Tarnished", '@', 300);
-		world.addPlayer(player, gameMap.at(36, 10));
+		world.addPlayer(player, gameMap.at(34, 10));
 
+		HeavySkeletalSwordsman hss = new HeavySkeletalSwordsman();
+		gameMap.at(33,10).addActor(hss);
 		world.run();
 	}
 }

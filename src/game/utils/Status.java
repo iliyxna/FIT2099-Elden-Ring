@@ -12,6 +12,6 @@ public enum Status {
     LONE_WOLF,
     GIANT_CRAB,
     HEAVY_SKELETAL_SWORDSMAN,
-    SPINNING_ATTACK
+    AREA_ATTACK
 
 }

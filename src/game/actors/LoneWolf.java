@@ -10,6 +10,7 @@ import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.actions.AttackAction;
+import game.actions.SlamAttackAction;
 import game.behaviours.Behaviour;
 import game.behaviours.FollowBehaviour;
 import game.utils.Status;
@@ -64,7 +65,6 @@ public class LoneWolf extends Enemy {
         // de-spawn if not following player
         if(Math.random() <= 0.1 && !following){
             map.removeActor(this);
-            System.out.println("Lone wolf removed");
             return new DoNothingAction();
         }
         return new DoNothingAction();

@@ -28,17 +28,19 @@ public class HeavySkeletalSwordsman extends Enemy{
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
 
-        if(!this.isConscious()){
-            Location pos = map.locationOf(this);
-            map.addActor(new PileOfBones(), pos);
-            map.removeActor(this);
-        }
-
         boolean following = false;
+        // de-spawn if not following player
+        //Math.random() <= 0.1 && !following
+        if(Math.random() <= 0.1) {
+            map.removeActor(this);
+            System.out.println("hss despawned");
+            return new DoNothingAction();
+        }
 
         // added getBehaviour()
         for (Behaviour behaviour : this.getBehaviours().values()) {
             Action action = behaviour.getAction(this, map);
+
 
             // check if the current behaviour is following the player
             if(behaviour instanceof FollowBehaviour){
@@ -48,12 +50,7 @@ public class HeavySkeletalSwordsman extends Enemy{
             if(action != null)
                 return action;
         }
-        // de-spawn if not following player
-        if(Math.random() <= 0.1 && !following){
-            map.removeActor(this);
-            System.out.println("Lone wolf removed");
-            return new DoNothingAction();
-        }
+
         return new DoNothingAction();
     }
 
