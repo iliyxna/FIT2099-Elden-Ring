@@ -4,12 +4,9 @@ import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
-import game.Purchasable;
+import game.weapons.Purchasable;
 import game.actors.Player;
 import game.actors.Trader;
-import game.rune.Rune;
-
-import java.util.Map;
 
 /**
  * An action class that allows Player to buy weapon from Trader.
@@ -27,9 +24,9 @@ public class BuyWeaponAction extends Action {
     }
 
     @Override
-    public String execute(Actor seller, GameMap map) {
+    public String execute(Actor buyer, GameMap map) {
         String retString;
-        Player player = (Player) seller;
+        Player player = (Player) buyer;
         int playerRune = player.getTotalRunes().getRuneValue();
         int weaponPrice = weapon.getBuyPrice().getRuneValue();
 

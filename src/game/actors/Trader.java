@@ -25,15 +25,6 @@ import java.util.Map;
 public class Trader extends Actor {
     private String name;
 
-//    // Price List for Items (non-weapon)
-//    private Map<Item, Rune> buyItemRuneList = new HashMap<>();
-//    private Map<Item,Rune> sellItemRuneList = new HashMap<>();
-//
-//    // Price List for WeaponItems
-//    private Map<WeaponItem, Rune> buyWeaponRuneList = new HashMap<>();
-//    private Map<WeaponItem,Rune> sellWeaponRuneList = new HashMap<>();
-    private Location traderLocation;
-
     /**
      * Constructor for Trader class.
      */
@@ -59,13 +50,10 @@ public class Trader extends Actor {
         actionList.add(new BuyWeaponAction(new GreatKnife()));
         actionList.add(new BuyWeaponAction(new Uchigatana()));
         // Player sell weapon to trader
-        actionList.add(new SellWeaponAction(new Club()));
-        actionList.add(new SellWeaponAction(new GreatKnife()));
-        actionList.add(new SellWeaponAction(new Uchigatana()));
-        actionList.add(new SellWeaponAction(new Grossmesser()));
+        for (WeaponItem weapon : otherActor.getWeaponInventory()){
+            actionList.add(new SellWeaponAction(weapon));
+        }
 
-        // Display number of runes player is holding
-        System.out.println("Player's rune value: $" + player.getTotalRunes());
         return actionList;
     }
 

@@ -4,9 +4,15 @@ import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.displays.Display;
+import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.displays.Menu;
+import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
+import game.Consumable;
+import game.actions.ConsumeAction;
+import game.items.CrimsonTears;
 import game.rune.Rune;
+import game.rune.RuneManager;
 import game.weapons.Club;
 import game.reset.Resettable;
 import game.utils.Status;
@@ -19,12 +25,13 @@ import game.utils.Status;
  * Modified by:
  *
  */
-public class Player extends Actor implements Resettable {
+public class Player extends Actor implements Resettable, RuneManager {
 
 	private final Menu menu = new Menu();
 
-	// player's runes
-	private Rune totalRunes = new Rune(0);
+	// player's runes in value (not rune object. RuneManager manages it)
+	private int totalRunes = 0;
+	private int crimsonFlaskCount = 2;
 
 	/**
 	 * Constructor.
@@ -39,6 +46,11 @@ public class Player extends Actor implements Resettable {
 		this.addCapability(Status.PLAYER);
 		this.addCapability(Status.CAN_ENTER_FLOOR);
 		this.addWeaponToInventory(new Club());
+
+		// Add flask of crimson tears
+		this.addItemToInventory(new CrimsonTears());
+		this.addItemToInventory(new CrimsonTears());
+		this.addItemToInventory(new CrimsonTears()); 	// extra flask for debugging purpose
 	}
 
 	@Override
@@ -47,6 +59,16 @@ public class Player extends Actor implements Resettable {
 		if (lastAction.getNextAction() != null)
 			return lastAction.getNextAction();
 
+		// Display number of runes player is holding
+		System.out.println("Player's rune value: $" + this.getTotalRunes());
+
+		// Only print consume action if consumable item is in inventory
+		for (Item item: this.getItemInventory()){
+			if (item instanceof Consumable){
+				actions.add(new ConsumeAction(item));
+			}
+		}
+
 		// return/print the console menu
 		return menu.showMenu(this, actions, display);
 	}
@@ -54,29 +76,49 @@ public class Player extends Actor implements Resettable {
 	@Override
 	public void reset() {}
 
+
+	@Override
 	/**
 	 * Getter method to retrieve the total runes owned by the player.
 	 * @return total runes owned by player
 	 */
 	public Rune getTotalRunes() {
-		return totalRunes;
+		return new Rune(totalRunes);
 	}
 
+	@Override
 	/**
 	 * Setter method to set the new rune value the player has.
 	 * @param totalRunes the total runes owned by player
 	 */
-	public void setTotalRunes(int totalRunes) {
-		this.totalRunes.setRuneValue(totalRunes);
+	public void setTotalRunes(int value) {
+		this.totalRunes = value;
 	}
 
+	@Override
 	public void addRunes(int value){
-		int newValue = totalRunes.getRuneValue() + value;
+		int newValue = totalRunes + value;
 		setTotalRunes(newValue);
 	}
 
+	@Override
 	public void subtractRunes(int value){
-		int newValue = totalRunes.getRuneValue() - value;
+		int newValue = totalRunes - value;
 		setTotalRunes(newValue);
+	}
+
+	public int getHitPoints(){
+		return this.hitPoints;
+	}
+	public void increaseHP(int hp){
+		this.hitPoints += hp;
+	}
+
+	public int getCrimsonFlaskCount() {
+		return crimsonFlaskCount;
+	}
+
+	public void decreaseCrimsonFlaskCount() {
+		this.crimsonFlaskCount--;
 	}
 }

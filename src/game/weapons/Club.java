@@ -3,8 +3,6 @@ package game.weapons;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
-import game.Purchasable;
-import game.Sellable;
 import game.rune.Rune;
 
 /**
@@ -16,8 +14,7 @@ import game.rune.Rune;
  *
  */
 public class Club extends WeaponItem implements Purchasable, Sellable {
-    private final Rune BUY_PRICE = new Rune(600);
-    private final Rune SELL_PRICE = new Rune(100);
+
     /**
      * Constructor for Club
      */
@@ -30,11 +27,12 @@ public class Club extends WeaponItem implements Purchasable, Sellable {
 
     @Override
     public Rune getBuyPrice() {
-        return BUY_PRICE;
+        return new Rune(600);
     }
 
     @Override
     public Rune getSellPrice() {
-        return SELL_PRICE;
+
+        return new Rune(100);
     }
 }

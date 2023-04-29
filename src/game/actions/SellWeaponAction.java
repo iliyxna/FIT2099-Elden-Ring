@@ -4,12 +4,9 @@ import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
-import game.Sellable;
+import game.weapons.Sellable;
 import game.actors.Player;
 import game.actors.Trader;
-import game.rune.Rune;
-
-import java.util.Map;
 
 /**
  * An action class that allows Player to sell weapon to Trader.
@@ -28,24 +25,28 @@ public class SellWeaponAction extends Action {
 
     @Override
     public String execute(Actor seller, GameMap map) {
-        String ret;
+        String ret = "";
         Player player = (Player) seller;
         int weaponPrice = weapon.getSellPrice().getRuneValue();
         // Transaction
         // check if player have the weapon in their inventory
-        if (player.getWeaponInventory().contains((WeaponItem) weapon)) {
-            player.removeWeaponFromInventory((WeaponItem) weapon);
-            player.addRunes(weaponPrice);
-            ret = weapon.toString() + " has been removed from inventory.";
-        } else {
-            ret = "Player does not have " + weapon.toString();
+        for (int i = 0; i < player.getWeaponInventory().size(); i++){
+            if(player.getWeaponInventory().get(i).getClass() == weapon.getClass()){
+                player.removeWeaponFromInventory((WeaponItem) weapon);
+                player.addRunes(weaponPrice);
+                ret =  weapon.toString() + " has been removed from inventory.";
+            } else {
+                ret =  weapon.toString() + " not in inventory.";
+            }
         }
         return ret;
     }
 
     @Override
     public String menuDescription(Actor actor) {
-        return "Sell Weapon: " + weapon.toString() +  "for $" + weapon.getSellPrice() + " to Merchant Kale";
+        return "Sell Weapon: " + weapon.toString() +  " for $" + weapon.getSellPrice() + " to Merchant Kale";
     }
 
 }
+
+
