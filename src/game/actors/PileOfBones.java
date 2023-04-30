@@ -7,6 +7,7 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
+import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actions.AttackAction;
 import game.utils.Status;
 import game.weapons.Grossmesser;
@@ -48,10 +49,18 @@ public class PileOfBones extends Actor {
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
 
-        if(!otherActor.hasCapability(Status.HEAVY_SKELETAL_SWORDSMAN)){
-            actions.add(new AttackAction(this, direction));
-            // HINT 1: The AttackAction above allows you to attack the enemy with your intrinsic weapon.
-            // HINT 1: How would you attack the enemy with a weapon?
+        if(!otherActor.hasCapability(Status.HEAVY_SKELETAL_SWORDSMAN)) {
+            if (otherActor.getWeaponInventory().size() != 0) {
+                // Use first weapon in inventory to attack
+                WeaponItem attackWeapon = otherActor.getWeaponInventory().get(0);
+                actions.add(new AttackAction(this, direction, attackWeapon));
+                // Some weapons have unique skills
+                if (attackWeapon.hasCapability(Status.UNIQUE_SKILL)) {
+                    actions.add(attackWeapon.getSkill(this, direction));
+                }
+            } else {
+                actions.add(new AttackAction(this, direction, otherActor.getIntrinsicWeapon()));
+            }
         }
         return actions;
     }

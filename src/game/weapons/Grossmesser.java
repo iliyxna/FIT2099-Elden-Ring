@@ -8,8 +8,8 @@ public class Grossmesser extends WeaponItem {
      * Constructor.
      */
     public Grossmesser() {
-        super("Grossmesser",'?',115,"hits", 85);
-        this.addCapability(Status.SPINNING_ATTACK);
+        super("Grossmesser", '?', 115, "swish",85 );
+        this.addCapability(Status.GROSSMESSER_SKILL);
     }
 
 

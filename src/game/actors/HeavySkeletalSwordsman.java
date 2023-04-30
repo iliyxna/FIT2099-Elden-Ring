@@ -14,63 +14,14 @@ import game.behaviours.FollowBehaviour;
 import game.utils.Status;
 import game.weapons.Grossmesser;
 
-public class HeavySkeletalSwordsman extends Enemy{
-    /**
-     * Constructor.
-     */
+public class HeavySkeletalSwordsman extends Enemy {
+
     public HeavySkeletalSwordsman() {
         super("Heavy Skeletal Swordsman", 'q',153,
                 35,892);
         this.addWeaponToInventory(new Grossmesser());
         this.addCapability(Status.HEAVY_SKELETAL_SWORDSMAN);
+        this.setSelfType(Status.SKELETAL_TYPE);
     }
-
-    @Override
-    public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-
-        boolean following = false;
-        // de-spawn if not following player
-        //Math.random() <= 0.1 && !following
-        if(Math.random() <= 0.1) {
-            map.removeActor(this);
-            System.out.println("hss despawned");
-            return new DoNothingAction();
-        }
-
-        // added getBehaviour()
-        for (Behaviour behaviour : this.getBehaviours().values()) {
-            Action action = behaviour.getAction(this, map);
-
-
-            // check if the current behaviour is following the player
-            if(behaviour instanceof FollowBehaviour){
-                following = true;
-            }
-
-            if(action != null)
-                return action;
-        }
-
-        return new DoNothingAction();
-    }
-
-    /**
-     * The Heavy Skeletal Swordsman can be attacked by any actor that does not have the HEAVY_SKELETAL_SWORDSMAN
-     * capability
-     *
-     * @param otherActor the Actor that might be performing attack
-     * @param direction  String representing the direction of the other Actor
-     * @param map        current GameMap
-     * @return
-     */
-    @Override
-    public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
-        ActionList actions = new ActionList();
-        if(!otherActor.hasCapability(Status.HEAVY_SKELETAL_SWORDSMAN)){
-            actions.add(new AttackAction(this, direction));
-        }
-        return actions;
-    }
-
 
 }

@@ -17,7 +17,8 @@ import game.utils.Status;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiantCrab extends Enemy{
+public class GiantCrab extends Enemy {
+
     /**
      * Constructor.
      */
@@ -25,6 +26,7 @@ public class GiantCrab extends Enemy{
         super("Giant Crab", 'C', 407,
                 318,4961);
         this.addCapability(Status.GIANT_CRAB);
+        this.setSelfType(Status.WATER_TYPE);
     }
 
     @Override
@@ -52,45 +54,8 @@ public class GiantCrab extends Enemy{
 
     }
 
-    /**
-     * The Giant Crab  can be attacked by any actor that does not have the GIANT_CRAB capability
-     *
-     * @param otherActor the Actor that might be performing attack
-     * @param direction  String representing the direction of the other Actor
-     * @param map        current GameMap
-     * @return
-     */
-    @Override
-    public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
-        ActionList actions = new ActionList();
-
-        List<Actor> targets = new ArrayList<>();
-        if(!otherActor.hasCapability(Status.GIANT_CRAB) && Math.random() <= 0.5){
-
-            // get actor location
-            Location actorLoc = map.locationOf(this);
-            for(Exit exit : actorLoc.getExits()){
-                Location destination = exit.getDestination();
-                if (destination.containsAnActor()) {
-                    targets.add(destination.getActor());
-                }
-            }
-
-//            // attack each target
-//            for(Actor target : targets){
-//                target;
-//            }
-
-        }else{
-            actions.add(new AttackAction(this, direction));
-            // HINT 1: The AttackAction above allows you to attack the enemy with your intrinsic weapon.
-            // HINT 1: How would you attack the enemy with a weapon?
-        }
-        return actions;
-    }
-
     @Override
     public IntrinsicWeapon getIntrinsicWeapon() {
-        return new IntrinsicWeapon(208, "claws");
+        return new IntrinsicWeapon(208, "claws",90);
     }
 }

@@ -45,7 +45,6 @@ public class FollowBehaviour implements Behaviour {
 			if (destination.canActorEnter(actor)) {
 				int newDistance = distance(destination, there);
 				if (newDistance < currentDistance) {
-					System.out.println("enemy follow");
 					return new MoveActorAction(destination, exit.getName());
 				}
 			}

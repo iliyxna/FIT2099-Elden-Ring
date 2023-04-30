@@ -9,9 +9,17 @@ public enum Status {
     HOSTILE_TO_ENEMY,
     RESPAWNABLE,
     RESTING,
-    LONE_WOLF,
-    GIANT_CRAB,
     HEAVY_SKELETAL_SWORDSMAN,
-    AREA_ATTACK
+    GIANT_CRAB,
+    LONE_WOLF,
+    CAN_ENTER_FLOOR,
+    ENEMY,
+    PLAYER,
+    CONSUMABLE,  // for items
+    SKELETAL_TYPE, // HSS, Skeletal bandit
+    DOG_TYPE,   // Lone wolf, Giant dog
+    WATER_TYPE, // Giant crab, Giant crayfish
+    GROSSMESSER_SKILL,
+    UNIQUE_SKILL
 
 }
