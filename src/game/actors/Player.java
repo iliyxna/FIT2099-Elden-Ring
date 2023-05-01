@@ -59,8 +59,8 @@ public class Player extends Actor implements Resettable {
 
 
 		// Deal with Grossmesser AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
-		if (this.getWeaponInventory().size() != 0){
-			if (this.getWeaponInventory().get(0).getClass() == Grossmesser.class ){
+		if (this.getWeaponInventory().size() != 0) {
+			if (this.getWeaponInventory().get(0).getClass() == Grossmesser.class) {
 				for (Exit exit : playerLocation.getExits()) {
 					Location destination = exit.getDestination();
 					if (destination.containsAnActor()) {
@@ -70,14 +70,14 @@ public class Player extends Actor implements Resettable {
 				}
 			}
 
-
+		}
 
 			// Only print consume action if consumable item is in inventory
 			for (Item item : this.getItemInventory()) {
 //			if (item.hasCapability(Status.CONSUMABLE)){
 //				actions.add(new ConsumeAction(item));
 			}
-		}
+
 		// return/print the console menu
 		return menu.showMenu(this, actions, display);
 	}
