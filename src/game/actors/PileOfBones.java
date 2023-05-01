@@ -22,7 +22,7 @@ public class PileOfBones extends Actor {
     public PileOfBones() {
         super("Pile of Bones",'X',1);
         this.addWeaponToInventory(new Grossmesser());
-        this.addCapability(Status.HEAVY_SKELETAL_SWORDSMAN);
+        this.addCapability(Status.PILE_OF_BONES);
         counter = 1;
     }
 
@@ -35,11 +35,10 @@ public class PileOfBones extends Actor {
 
         if(!this.isConscious()){
             map.removeActor(this);
-            return new DoNothingAction();
+
         }else if (counter == 3 && this.isConscious()){
             map.removeActor(this);
             map.addActor(new HeavySkeletalSwordsman(), pos);
-            return new DoNothingAction();
         }
 
         counter += 1;
@@ -48,18 +47,18 @@ public class PileOfBones extends Actor {
 
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
+        if(!otherActor.hasCapability(Status.HEAVY_SKELETAL_SWORDSMAN)){
+            actions.add(new AttackAction(this, direction));
+        }
 
-        if(!otherActor.hasCapability(Status.HEAVY_SKELETAL_SWORDSMAN)) {
-            if (otherActor.getWeaponInventory().size() != 0) {
-                // Use first weapon in inventory to attack
-                WeaponItem attackWeapon = otherActor.getWeaponInventory().get(0);
-                actions.add(new AttackAction(this, direction, attackWeapon));
-                // Some weapons have unique skills
-                if (attackWeapon.hasCapability(Status.UNIQUE_SKILL)) {
-                    actions.add(attackWeapon.getSkill(this, direction));
-                }
-            } else {
-                actions.add(new AttackAction(this, direction, otherActor.getIntrinsicWeapon()));
+        // If player has weapon, can choose to fight with weaponItem
+        if (otherActor.getWeaponInventory().size() != 0){
+            // Use first weapon in inventory to attack
+            WeaponItem attackWeapon = otherActor.getWeaponInventory().get(0);
+            actions.add(new AttackAction(this, direction, attackWeapon));
+            // Some weapons have unique skills
+            if (attackWeapon.hasCapability(Status.UNIQUE_SKILL)){
+                actions.add(attackWeapon.getSkill(this, direction));
             }
         }
         return actions;

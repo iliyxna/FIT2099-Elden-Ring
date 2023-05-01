@@ -12,6 +12,7 @@ public enum Status {
     HEAVY_SKELETAL_SWORDSMAN,
     GIANT_CRAB,
     LONE_WOLF,
+    PILE_OF_BONES,
     CAN_ENTER_FLOOR,
     ENEMY,
     PLAYER,
@@ -19,7 +20,6 @@ public enum Status {
     SKELETAL_TYPE, // HSS, Skeletal bandit
     DOG_TYPE,   // Lone wolf, Giant dog
     WATER_TYPE, // Giant crab, Giant crayfish
-    GROSSMESSER_SKILL,
+    ENEMY_WEAPON_SKILL,
     UNIQUE_SKILL
-
 }

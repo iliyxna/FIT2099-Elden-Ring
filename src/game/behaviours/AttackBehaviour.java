@@ -11,7 +11,8 @@ import game.actions.AreaAttackAction;
 import game.actors.Enemy;
 import game.utils.Status;
 
-public class AttackBehaviour implements Behaviour{
+public class AttackBehaviour implements Behaviour {
+
     /**
      * Returns an AttackAction to attack an Actor close by, if possible.
      * If not possible, return null.
@@ -36,16 +37,17 @@ public class AttackBehaviour implements Behaviour{
                     return new AreaAttackAction();
                 }
 
-//                if (actor.getWeaponInventory() != null){
-//                    weapon = actor.getWeaponInventory().get(0);
-//                    if (weapon.hasCapability(Status.GROSSMESSER_SKILL)){
-//                        return new SpinningAttackAction(weapon);
-//                    }
-//                }
+                if (actor.getWeaponInventory().size() != 0){
+                    weapon = actor.getWeaponInventory().get(0);
+                    // Both Grossmesser and Scimitar users have 50% chance of casting Spinning attack
+                    if (weapon.hasCapability(Status.ENEMY_WEAPON_SKILL)){
+                        return weapon.getSkill(destination.getActor(), destination.toString());
+                    }
+                }
             }
 
             if (destination.containsAnActor() && destination.getActor().hasCapability(Status.HOSTILE_TO_ENEMY)) {
-                if (actor.getWeaponInventory() != null) {
+                if (actor.getWeaponInventory().size() != 0) {
                     weapon = actor.getWeaponInventory().get(0);
                     return new AttackAction(destination.getActor(), exit.getName(), weapon);
                 } else {
@@ -54,13 +56,28 @@ public class AttackBehaviour implements Behaviour{
             }
 
             if (destination.containsAnActor()){
-                Enemy target = (Enemy) destination.getActor();
-                if (attacker.getSelfType() != target.getSelfType()){
-                    if (actor.getWeaponInventory() != null) {
+                Actor target = destination.getActor();
+
+                // Pile of bones is not a subclass of Enemy, so cannot be cast
+                if (target.hasCapability(Status.PILE_OF_BONES)){
+                    if (actor.getWeaponInventory().size() != 0) {
                         weapon = actor.getWeaponInventory().get(0);
                         return new AttackAction(destination.getActor(), exit.getName(), weapon);
                     } else {
                         return new AttackAction(destination.getActor(), exit.getName());
+                    }
+                }
+
+                else {
+                    // For enemy subclasses only
+                    Enemy target_ = (Enemy) destination.getActor();
+                    if (attacker.getSelfType() != target_.getSelfType()) {
+                        if (actor.getWeaponInventory().size() != 0) {
+                            weapon = actor.getWeaponInventory().get(0);
+                            return new AttackAction(destination.getActor(), exit.getName(), weapon);
+                        } else {
+                            return new AttackAction(destination.getActor(), exit.getName());
+                        }
                     }
                 }
             }
@@ -68,6 +85,5 @@ public class AttackBehaviour implements Behaviour{
         }
         return null;
     }
-
 }
 

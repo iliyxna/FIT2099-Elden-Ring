@@ -64,6 +64,10 @@ public class Enemy extends Actor {
                 this.addBehaviour(998, new FollowBehaviour(otherActor));
                 isFollowingPlayer = true;
             }
+            // Player can choose to attack with intrinsic weapon
+            actions.add(new AttackAction(this, direction, otherActor.getIntrinsicWeapon()));
+
+            // If player has weapon, can choose to fight with weaponItem
             if (otherActor.getWeaponInventory().size() != 0){
                 // Use first weapon in inventory to attack
                 WeaponItem attackWeapon = otherActor.getWeaponInventory().get(0);
@@ -72,11 +76,7 @@ public class Enemy extends Actor {
                 if (attackWeapon.hasCapability(Status.UNIQUE_SKILL)){
                     actions.add(attackWeapon.getSkill(this, direction));
                 }
-            }else{
-                actions.add(new AttackAction(this, direction, otherActor.getIntrinsicWeapon()));
             }
-            // Player can choose to attack with intrinsic weapon
-//            actions.add(new AttackAction(this, direction, otherActor.getIntrinsicWeapon()));
         }
         return actions;
     }
@@ -95,11 +95,13 @@ public class Enemy extends Actor {
         this.selfType = selfType;
     }
 
-    public boolean getIsFollowingPlayer() {
-        return this.isFollowingPlayer; }
-
+    public boolean getIsFollowingPlayer(){ return this.isFollowingPlayer; }
     public void addBehaviour(int number, Behaviour behaviour){
         behaviours.put(number,behaviour);
     }
+
+//    public Rune getEnemyRuneValue() {
+//        return new Rune(this.enemyRuneValue);
+//    }
 
 }

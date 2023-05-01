@@ -41,7 +41,7 @@ public class AttackAction extends Action {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param target the Actor to attack
 	 * @param direction the direction where the attack should be performed (only used for display purposes)
 	 */
@@ -73,6 +73,7 @@ public class AttackAction extends Action {
 	 */
 	@Override
 	public String execute(Actor actor, GameMap map) {
+
 		if (weapon == null) {
 			weapon = actor.getIntrinsicWeapon();
 		}
@@ -84,8 +85,12 @@ public class AttackAction extends Action {
 		int damage = weapon.damage();
 		String result = actor + " " + weapon.verb() + " " + target + " for " + damage + " damage.";
 		target.hurt(damage);
+
+		// Deals with unconscious actors
 		if (!target.isConscious()) {
+			// Deals with spawning and de-spawning of heavy skeletal swordsman
 			if (target instanceof HeavySkeletalSwordsman) {
+				System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
 				Location pos = map.locationOf(target);
 				map.removeActor(target);
 				map.addActor(new PileOfBones(), pos);
@@ -105,5 +110,29 @@ public class AttackAction extends Action {
 	@Override
 	public String menuDescription(Actor actor) {
 		return actor + " attacks " + target + " at " + direction + " with " + (weapon != null ? weapon : "Intrinsic Weapon");
+	}
+
+	public Actor getTarget() {
+		return target;
+	}
+
+	public void setTarget(Actor target) {
+		this.target = target;
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	public void setWeapon(Weapon weapon) {
+		this.weapon = weapon;
+	}
+
+	public String getDirection() {
+		return direction;
+	}
+
+	public void setDirection(String direction) {
+		this.direction = direction;
 	}
 }

@@ -17,17 +17,20 @@ import java.util.List;
 import java.util.Random;
 
 public class AreaAttackAction extends Action implements AreaAttack {
-    private WeaponItem weapon;
-    private IntrinsicWeapon intrinsicWeapon;
+
+    private Weapon weapon;
     private Random rand = new Random();
     private List<Location> targetLocations;
     private boolean containWeapon = false;
 
+    // Area attacks without weapon
     public AreaAttackAction(){
     }
 
+    // Area attacks with weapon (unique skill of weapon)
     public AreaAttackAction(WeaponItem weapon){
         this.weapon = weapon;
+
         this.containWeapon = true;
     }
 
@@ -35,71 +38,45 @@ public class AreaAttackAction extends Action implements AreaAttack {
     @Override
     public String execute(Actor actor, GameMap map) {
 
-        if(!containWeapon){
-            intrinsicWeapon = actor.getIntrinsicWeapon();
-            String result = "";
-            // Get locations of the targets around the attacker
-            targetLocations = attackArea(actor, map);
-
-            // Every actor will be dealt with the same damage and attack accuracy (hitRate)
-            int damage = weapon.damage();
-            if (!(rand.nextInt(100) <= weapon.chanceToHit())) {
-                return actor + " misses the attack.";
-            } else {
-                for (Location location : targetLocations){
-                    Actor target = location.getActor();
-                    target.hurt(damage);
-
-                    // Deals with unconscious actors
-                    if (!target.isConscious()) {
-                        // Deals with spawning and de-spawning of heavy skeletal swordsman
-                        if (target instanceof HeavySkeletalSwordsman) {
-                            Location pos = map.locationOf(target);
-                            map.removeActor(target);
-                            map.addActor(new PileOfBones(), pos);
-                        } else {
-                            result += new DeathAction(actor).execute(target, map) + "\n";
-                        }
-                    }
-                }
-                result += actor + " " + weapon.verb() + " every target for " + damage + " damage.";
-            }
-            return result;
-        }else{
-            String result = "";
-            // Get locations of the targets around the attacker
-            targetLocations = attackArea(actor, map);
-
-            // Every actor will be dealt with the same damage and attack accuracy (hitRate)
-            int damage = weapon.damage();
-            if (!(rand.nextInt(100) <= weapon.chanceToHit())) {
-                return actor + " misses the attack.";
-            } else {
-                for (Location location : targetLocations){
-                    Actor target = location.getActor();
-                    target.hurt(damage);
-
-                    // Deals with unconscious actors
-                    if (!target.isConscious()) {
-                        // Deals with spawning and de-spawning of heavy skeletal swordsman
-                        if (target instanceof HeavySkeletalSwordsman) {
-                            Location pos = map.locationOf(target);
-                            map.removeActor(target);
-                            map.addActor(new PileOfBones(), pos);
-                        } else {
-                            result += new DeathAction(actor).execute(target, map) + "\n";
-                        }
-                    }
-                }
-                result += actor + " " + weapon.verb() + " every target for " + damage + " damage.";
-            }
-            return result;
+        if(!containWeapon) {
+            weapon = actor.getIntrinsicWeapon();
         }
+
+        String result = "";
+
+        // Get locations of the targets around the attacker
+        targetLocations = attackArea(actor, map);
+
+        // Every actor will be dealt with the same damage and attack accuracy (hitRate)
+        int damage = weapon.damage();
+        if (!(rand.nextInt(100) <= weapon.chanceToHit())) {
+            return actor + " misses the attack.";
+        } else {
+            for (Location location : targetLocations){
+                Actor target = location.getActor();
+                target.hurt(damage);
+
+                // Deals with unconscious actors
+                if (!target.isConscious()) {
+                    // Deals with spawning and de-spawning of heavy skeletal swordsman
+                    if (target instanceof HeavySkeletalSwordsman) {
+                        System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
+                        Location pos = map.locationOf(target);
+                        map.removeActor(target);
+                        map.addActor(new PileOfBones(), pos);
+                    } else {
+                        result += new DeathAction(actor).execute(target, map) + "\n";
+                    }
+                }
+            }
+            result += actor + " " + weapon.verb() + " every target for " + damage + " damage.";
+        }
+        return result;
     }
 
     @Override
     public String menuDescription(Actor actor) {
-        return null;
+        return actor + " attacks surrounding enemies with " + weapon;
     }
 
     @Override
@@ -113,9 +90,5 @@ public class AreaAttackAction extends Action implements AreaAttack {
             }
         }
         return locations;
-    }
-
-    public void performAttack(){
-
     }
 }
