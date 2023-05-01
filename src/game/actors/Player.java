@@ -28,10 +28,6 @@ public class Player extends Actor implements Resettable {
 
 	private final Menu menu = new Menu();
 
-	// player's runes in value (not rune object. RuneManager manages it)
-	private int totalRunes = 0;
-	private int crimsonFlaskCount = 2;
-
 
 	/**
 	 * Constructor.
@@ -46,10 +42,7 @@ public class Player extends Actor implements Resettable {
 		this.addCapability(Status.PLAYER);
 		this.addCapability(Status.CAN_ENTER_FLOOR);
 		this.addWeaponToInventory(new Club());
-//
-//		// Add flask of crimson tears
-//		this.addItemToInventory(new CrimsonTears());
-//		this.addItemToInventory(new CrimsonTears());
+
 	}
 
 	@Override
@@ -63,7 +56,7 @@ public class Player extends Actor implements Resettable {
 		}
 		// Display number of runes player is holding
 		System.out.println("Player's current health: " + this.printHp());
-//		System.out.println("Player's rune value: $" + this.getTotalRunes());
+
 
 		// Deal with Grossmesser AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
 		if (this.getWeaponInventory().get(0).getClass() == Grossmesser.class) {
@@ -96,48 +89,4 @@ public class Player extends Actor implements Resettable {
 		return new IntrinsicWeapon(11, "punches", 100);
 	}
 
-//	@Override
-//	/**
-//	 * Getter method to retrieve the total runes owned by the player.
-//	 * @return total runes owned by player
-//	 */
-//	public Rune getTotalRunes() {
-//		return new Rune(totalRunes);
-//	}
-//
-//	@Override
-//	/**
-//	 * Setter method to set the new rune value the player has.
-//	 * @param totalRunes the total runes owned by player
-//	 */
-//	public void setTotalRunes(int value) {
-//		this.totalRunes = value;
-//	}
-
-//	@Override
-//	public void addRunes(int value){
-//		int newValue = totalRunes + value;
-//		setTotalRunes(newValue);
-//	}
-//
-//	@Override
-//	public void subtractRunes(int value){
-//		int newValue = totalRunes - value;
-//		setTotalRunes(newValue);
-//	}
-
-//	public int getHitPoints(){
-//		return this.hitPoints;
-//	}
-	public void increaseHP(int hp){
-		this.hitPoints += hp;
-	}
-
-	public int getCrimsonFlaskCount() {
-		return crimsonFlaskCount;
-	}
-
-	public void decreaseCrimsonFlaskCount() {
-		this.crimsonFlaskCount--;
-	}
 }

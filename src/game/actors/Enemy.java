@@ -100,8 +100,5 @@ public class Enemy extends Actor {
         behaviours.put(number,behaviour);
     }
 
-//    public Rune getEnemyRuneValue() {
-//        return new Rune(this.enemyRuneValue);
-//    }
 
 }
