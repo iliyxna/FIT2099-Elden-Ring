@@ -73,8 +73,6 @@ public class Application {
 		Player player = new Player("Tarnished", '@', 300);
 		world.addPlayer(player, gameMap.at(34, 10));
 
-		GiantCrab lw = new GiantCrab();
-		gameMap.at(33,10).addActor(lw);
 
 		world.run();
 	}
