@@ -6,6 +6,10 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
+import game.actors.Enemy;
+import game.actors.PileOfBones;
+import game.actors.Player;
+import game.utils.Status;
 
 /**
  * An action executed if an actor is killed.
@@ -41,10 +45,28 @@ public class DeathAction extends Action {
             dropActions.add(weapon.getDropAction(target));
         for (Action drop : dropActions)
             drop.execute(target, map);
-        // remove actor
-        map.removeActor(target);
-        result += System.lineSeparator() + menuDescription(target);
-        return result;
+
+        // Display number of runes dropped and update player runes
+        if (attacker.hasCapability(Status.PLAYER)) {
+            Player player = (Player) attacker;
+
+            if (target.hasCapability(Status.ENEMY)) {
+                Enemy targetEnemy = (Enemy) target;
+                player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
+                System.out.println("Runes dropped: " + targetEnemy.getEnemyRuneValue());
+            } else if (target.hasCapability(Status.PILE_OF_BONES)) {
+                // pile of bones could previously be HSS or Skeletal bandit
+                PileOfBones pileOfBones = (PileOfBones) target;
+                // HSS or skeletal bandit?
+                Enemy targetEnemy = pileOfBones.getPreviousEnemy();
+                player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
+                System.out.println("Runes dropped: " + targetEnemy.getEnemyRuneValue());
+            }
+        }
+            // remove actor
+            map.removeActor(target);
+            result += System.lineSeparator() + menuDescription(target);
+            return result;
     }
 
     @Override

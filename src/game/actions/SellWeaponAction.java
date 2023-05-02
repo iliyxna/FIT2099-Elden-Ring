@@ -4,6 +4,7 @@ import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
+import game.utils.Status;
 import game.weapons.Sellable;
 import game.actors.Player;
 import game.actors.Trader;
@@ -26,17 +27,19 @@ public class SellWeaponAction extends Action {
     @Override
     public String execute(Actor seller, GameMap map) {
         String ret = "";
-        Player player = (Player) seller;
-        int weaponPrice = weapon.getSellPrice().getRuneValue();
-        // Transaction
-        // check if player have the weapon in their inventory
-        for (int i = 0; i < player.getWeaponInventory().size(); i++){
-            if(player.getWeaponInventory().get(i).getClass() == weapon.getClass()){
-                player.removeWeaponFromInventory((WeaponItem) weapon);
-                player.getRuneManager().addRunes(weaponPrice);
-                ret =  weapon.toString() + " has been removed from inventory.";
-            } else {
-                ret =  weapon.toString() + " not in inventory.";
+        if (seller.hasCapability(Status.PLAYER)){
+            Player player = (Player) seller;
+            int weaponPrice = weapon.getSellPrice().getRuneValue();
+            // Transaction
+            // check if player have the weapon in their inventory
+            for (int i = 0; i < player.getWeaponInventory().size(); i++){
+                if(player.getWeaponInventory().get(i).getClass() == weapon.getClass()){
+                    player.removeWeaponFromInventory((WeaponItem) weapon);
+                    player.getRuneManager().addRunes(weaponPrice);
+                    ret =  weapon.toString() + " has been removed from inventory.";
+                } else {
+                    ret =  weapon.toString() + " not in inventory.";
+                }
             }
         }
         return ret;

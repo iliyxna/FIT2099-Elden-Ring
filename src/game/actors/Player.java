@@ -38,7 +38,6 @@ public class Player extends Actor implements Resettable{
 	private final Menu menu = new Menu();
 	private RuneManager runeManager;
 	private int crimsonFlaskCount = 2;
-
 	private RoleManager roleManager = RoleManager.getInstance();
 
 	/**
@@ -53,7 +52,7 @@ public class Player extends Actor implements Resettable{
 		this.addCapability(Status.HOSTILE_TO_ENEMY);
 		this.addCapability(Status.PLAYER);
 		this.addCapability(Status.CAN_ENTER_FLOOR);
-
+		this.addCapability(Status.SITE_OF_LOSTGRACE);
 		chooseClass();
 
 		// Add flask of crimson tears
@@ -133,5 +132,13 @@ public class Player extends Actor implements Resettable{
 		}
 
 	@Override
-	public void reset() {}
+	public void reset() {
+
+		// Reset player's hit points to maximum
+		this.resetMaxHp(this.maxHitPoints);
+
+		// Reset the number of uses of crimson flask to max num of uses
+		this.crimsonFlaskCount = 2;
+
+	}
 }

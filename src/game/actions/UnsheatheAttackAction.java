@@ -4,8 +4,9 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
-import game.actors.enemies.PileOfBones;
-import game.actors.enemies.HeavySkeletalSwordsman;
+import game.actors.Enemy;
+import game.actors.PileOfBones;
+import game.actors.HeavySkeletalSwordsman;
 
 import java.util.Random;
 
@@ -29,11 +30,13 @@ public class UnsheatheAttackAction extends AttackAction{
         // Deals with unconscious actors
         if (!this.getTarget().isConscious()) {
             // Deals with spawning and de-spawning of heavy skeletal swordsman
+            PileOfBones pileOfBones = new PileOfBones();
             if (this.getTarget() instanceof HeavySkeletalSwordsman) {
                 System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
+                pileOfBones.setPreviousEnemy((Enemy)this.getTarget());
                 Location pos = map.locationOf(this.getTarget());
                 map.removeActor(this.getTarget());
-                map.addActor(new PileOfBones(), pos);
+                map.addActor(pileOfBones, pos);
             } else {
                 result += new DeathAction(actor).execute(this.getTarget(), map);
             }
