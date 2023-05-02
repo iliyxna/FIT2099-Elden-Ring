@@ -7,8 +7,9 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
-import game.actors.HeavySkeletalSwordsman;
+import game.actors.Enemy;
 import game.actors.PileOfBones;
+import game.actors.HeavySkeletalSwordsman;
 
 /**
  * An Action to attack another Actor.
@@ -87,17 +88,20 @@ public class AttackAction extends Action {
 		target.hurt(damage);
 
 		// Deals with unconscious actors
-		if (!target.isConscious()) {
-			// Deals with spawning and de-spawning of heavy skeletal swordsman
-			if (target instanceof HeavySkeletalSwordsman) {
+        if (!target.isConscious()) {
+			// Deals with spawning and de-spawning of skeletal types.
+			// Pile of bones to be added to map
+			PileOfBones pileOfBones = new PileOfBones();
+            if (target instanceof HeavySkeletalSwordsman) {
 				System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
-				Location pos = map.locationOf(target);
-				map.removeActor(target);
-				map.addActor(new PileOfBones(), pos);
-			} else {
-				result += new DeathAction(actor).execute(target, map);
-			}
-		}
+				pileOfBones.setPreviousEnemy((Enemy)target);
+                Location pos = map.locationOf(target);
+                map.removeActor(target);
+                map.addActor(pileOfBones, pos);
+            } else {
+                result += new DeathAction(actor).execute(target, map);
+            }
+        }
 		return result;
 	}
 
