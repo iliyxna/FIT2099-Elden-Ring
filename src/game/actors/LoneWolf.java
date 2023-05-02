@@ -1,12 +1,7 @@
 package game.actors;
 
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
-import game.actors.Enemy;
-import game.behaviours.Behaviour;
 import game.utils.Status;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * BEHOLD, DOG!
@@ -17,7 +12,7 @@ import java.util.Map;
  *
  */
 public class LoneWolf extends Enemy {
-    private Map<Integer, Behaviour> behaviours = new HashMap<>();
+//    private Map<Integer, Behaviour> behaviours = new HashMap<>();
 
     public LoneWolf() {
         super("Lone Wolf", 'h', 102, 55, 1470);

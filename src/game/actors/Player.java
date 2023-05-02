@@ -40,6 +40,7 @@ public class Player extends Actor implements Resettable{
 	private int crimsonFlaskCount = 2;
 	private RoleManager roleManager = RoleManager.getInstance();
 
+
 	/**
 	 * Constructor.
 	 *
@@ -68,8 +69,32 @@ public class Player extends Actor implements Resettable{
 //		boolean haveEnemy = false;
 
 		// Handle multi-turn Actions
-		if (lastAction.getNextAction() != null)
+		if (lastAction.getNextAction() != null) {
 			return lastAction.getNextAction();
+		}
+		// Display number of runes player is holding
+		System.out.println("Player's current health: " + this.printHp());
+
+
+		// Deal with Grossmesser AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
+		if (this.getWeaponInventory().size() != 0) {
+			if (this.getWeaponInventory().get(0).getClass() == Grossmesser.class) {
+				for (Exit exit : playerLocation.getExits()) {
+					Location destination = exit.getDestination();
+					if (destination.containsAnActor()) {
+						actions.add(new AreaAttackAction(getWeaponInventory().get(0)));
+						break;
+					}
+				}
+			}
+
+		}
+
+			// Only print consume action if consumable item is in inventory
+			for (Item item : this.getItemInventory()) {
+//			if (item.hasCapability(Status.CONSUMABLE)){
+//				actions.add(new ConsumeAction(item));
+			}
 
 		// Display number of runes player is holding
 		System.out.println("Player's current health: " + this.printHp());
@@ -131,14 +156,14 @@ public class Player extends Actor implements Resettable{
 			}
 		}
 
+
+
 	@Override
-	public void reset() {
+	public void reset() {}
 
-		// Reset player's hit points to maximum
-		this.resetMaxHp(this.maxHitPoints);
-
-		// Reset the number of uses of crimson flask to max num of uses
-		this.crimsonFlaskCount = 2;
-
+	@Override
+	public IntrinsicWeapon getIntrinsicWeapon() {
+		return new IntrinsicWeapon(11, "punches", 100);
 	}
+
 }

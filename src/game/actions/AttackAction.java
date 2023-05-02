@@ -42,7 +42,7 @@ public class AttackAction extends Action {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param target the Actor to attack
 	 * @param direction the direction where the attack should be performed (only used for display purposes)
 	 */
