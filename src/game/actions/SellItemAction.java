@@ -4,8 +4,7 @@ import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
-import edu.monash.fit2099.engine.weapons.WeaponItem;
-import game.Sellable;
+import game.weapons.Sellable;
 import game.actors.Player;
 
 public class SellItemAction extends Action {
@@ -25,7 +24,7 @@ public class SellItemAction extends Action {
         // check if player have the item in their inventory
         if (player.getItemInventory().contains((Item) item)) {
             player.removeItemFromInventory((Item) item);
-            player.addRunes(itemPrice);
+            player.getRuneManager().addRunes(itemPrice);
             ret = item.toString() + " has been removed from inventory.";
         } else {
             ret = "Player does not have " + item.toString();

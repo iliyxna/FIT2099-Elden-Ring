@@ -33,12 +33,10 @@ import game.weapons.Uchigatana;
  * Modified by:
  *
  */
-public class Player extends Actor implements Resettable, RuneManager {
+public class Player extends Actor implements Resettable{
 
 	private final Menu menu = new Menu();
-
-	// player's runes in value (not rune object. RuneManager manages it)
-	private int totalRunes = 0;
+	private RuneManager runeManager;
 	private int crimsonFlaskCount = 2;
 
 	private RoleManager roleManager = RoleManager.getInstance();
@@ -61,6 +59,8 @@ public class Player extends Actor implements Resettable, RuneManager {
 		// Add flask of crimson tears
 		this.addItemToInventory(new CrimsonTears());
 		this.addItemToInventory(new CrimsonTears());
+
+		this.runeManager = RuneManager.getInstance();
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class Player extends Actor implements Resettable, RuneManager {
 
 		// Display number of runes player is holding
 		System.out.println("Player's current health: " + this.printHp());
-		System.out.println("Player's rune value: $" + this.getTotalRunes());
+		System.out.println("Player's rune value: $" + runeManager.getTotalRunes());
 
 		// Deal with Grossmesser AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
 		if (this.getWeaponInventory().size() != 0){
@@ -96,42 +96,12 @@ public class Player extends Actor implements Resettable, RuneManager {
 				actions.add(new ConsumeAction(item));
 			}
 		}
+
 		// return/print the console menu
 		return menu.showMenu(this, actions, display);
 	}
-
-	@Override
-	public void reset() {}
-
-
-	@Override
-	/**
-	 * Getter method to retrieve the total runes owned by the player.
-	 * @return total runes owned by player
-	 */
-	public Rune getTotalRunes() {
-		return new Rune(totalRunes);
-	}
-
-	@Override
-	/**
-	 * Setter method to set the new rune value the player has.
-	 * @param totalRunes the total runes owned by player
-	 */
-	public void setTotalRunes(int value) {
-		this.totalRunes = value;
-	}
-
-	@Override
-	public void addRunes(int value){
-		int newValue = totalRunes + value;
-		setTotalRunes(newValue);
-	}
-
-	@Override
-	public void subtractRunes(int value){
-		int newValue = totalRunes - value;
-		setTotalRunes(newValue);
+	public RuneManager getRuneManager(){
+		return this.runeManager;
 	}
 
 	public int getCrimsonFlaskCount() {
@@ -161,4 +131,7 @@ public class Player extends Actor implements Resettable, RuneManager {
 				break;
 			}
 		}
+
+	@Override
+	public void reset() {}
 }

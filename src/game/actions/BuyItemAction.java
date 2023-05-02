@@ -21,13 +21,13 @@ public class BuyItemAction extends Action {
     public String execute(Actor seller, GameMap map) {
         String retString;
         Player player = (Player) seller;
-        int playerRune = player.getTotalRunes().getRuneValue();
+        int playerRune = player.getRuneManager().getTotalRunes().getRuneValue();
         int itemPrice = item.getBuyPrice().getRuneValue();
 
         // Transaction
         if (playerRune >= itemPrice){
             player.addItemToInventory((Item) item);
-            player.subtractRunes(itemPrice);
+            player.getRuneManager().subtractRunes(itemPrice);
             retString = item.toString() + " has been successfully added to inventory.";
         } else {
             retString = "Purchase failed. Player does not have enough runes.";

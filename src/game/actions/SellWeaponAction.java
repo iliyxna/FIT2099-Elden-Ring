@@ -33,7 +33,7 @@ public class SellWeaponAction extends Action {
         for (int i = 0; i < player.getWeaponInventory().size(); i++){
             if(player.getWeaponInventory().get(i).getClass() == weapon.getClass()){
                 player.removeWeaponFromInventory((WeaponItem) weapon);
-                player.addRunes(weaponPrice);
+                player.getRuneManager().addRunes(weaponPrice);
                 ret =  weapon.toString() + " has been removed from inventory.";
             } else {
                 ret =  weapon.toString() + " not in inventory.";
