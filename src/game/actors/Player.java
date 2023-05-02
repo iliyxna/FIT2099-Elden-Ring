@@ -69,11 +69,11 @@ public class Player extends Actor implements Resettable {
 			}
 
 
-			// Only print consume action if consumable item is in inventory
-			for (Item item : this.getItemInventory()) {
+		// Only print consume action if consumable item is in inventory
+		for (Item item : this.getItemInventory()) {
 //			if (item.hasCapability(Status.CONSUMABLE)){
-//				actions.add(new ConsumeAction(item));
-			}
+//			actions.add(new ConsumeAction(item));
+		}
 		}
 		// return/print the console menu
 		return menu.showMenu(this, actions, display);
