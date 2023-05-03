@@ -22,7 +22,14 @@ import game.weapons.Uchigatana;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class representing the Trader of the game.
+ * @see Actor
+ */
 public class Trader extends Actor {
+    /**
+     * Name of the trader
+     */
     private String name;
 
     /**
@@ -57,15 +64,31 @@ public class Trader extends Actor {
         return actionList;
     }
 
+    /**
+     * Trader does nothing other than selling weapons and buying weapons to/from players.
+     * @param actions    collection of possible Actions for this Actor
+     * @param lastAction The Action this Actor took last turn. Can do interesting things in conjunction with Action.getNextAction()
+     * @param map        the map containing the Actor
+     * @param display    the I/O object to which messages may be written
+     * @return do nothing action.
+     */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
         return new DoNothingAction();
     }
 
+    /**
+     * Getter method for the trader's name.
+     * @return the name of the trader
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Setter method for the trader's name.
+     * @param name the name of the trader
+     */
     public void setName(String name) {
         this.name = name;
     }

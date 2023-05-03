@@ -19,8 +19,15 @@ import game.utils.Status;
  *
  */
 public class DeathAction extends Action {
+    /**
+     * Attacker
+     */
     private Actor attacker;
 
+    /**
+     * Constructor for DeathAction class.
+     * @param actor attacker
+     */
     public DeathAction(Actor actor) {
         this.attacker = actor;
     }
@@ -49,28 +56,32 @@ public class DeathAction extends Action {
         // Display number of runes dropped and update player runes
         if (attacker.hasCapability(Status.PLAYER)) {
             Player player = (Player) attacker;
-
             if (target.hasCapability(Status.ENEMY)) {
                 Enemy targetEnemy = (Enemy) target;
                 player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
-                System.out.println("Runes dropped: " + targetEnemy.getEnemyRuneValue());
+                System.out.println("Runes gained from killing "+ targetEnemy + ": " + targetEnemy.getEnemyRuneValue());
             } else if (target.hasCapability(Status.PILE_OF_BONES)) {
                 // pile of bones could previously be HSS or Skeletal bandit
                 PileOfBones pileOfBones = (PileOfBones) target;
                 // HSS or skeletal bandit?
                 Enemy targetEnemy = pileOfBones.getPreviousEnemy();
                 player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
-                System.out.println("Runes dropped: " + targetEnemy.getEnemyRuneValue());
+                System.out.println("Runes gained from killing "+ targetEnemy + ": " + targetEnemy.getEnemyRuneValue());
             }
         }
-            // remove actor
-            map.removeActor(target);
-            result += System.lineSeparator() + menuDescription(target);
-            return result;
+        // remove actor
+        map.removeActor(target);
+        result += System.lineSeparator() + menuDescription(target);
+        return result;
     }
 
+    /**
+     * Returns a descriptive string.
+     * @param actor The actor performing the action.
+     * @return a descriptive string
+     */
     @Override
     public String menuDescription(Actor actor) {
-        return actor + " is killed.";
+        return actor + " is killed. ";
     }
 }

@@ -4,12 +4,18 @@ import java.util.Random;
 
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.items.DropAction;
+import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.actors.Enemy;
 import game.actors.PileOfBones;
 import game.actors.HeavySkeletalSwordsman;
+import game.actors.Player;
+import game.reset.Resettable;
+import game.rune.Rune;
+import game.utils.Status;
 
 /**
  * An Action to attack another Actor.
@@ -74,7 +80,6 @@ public class AttackAction extends Action {
 	 */
 	@Override
 	public String execute(Actor actor, GameMap map) {
-
 		if (weapon == null) {
 			weapon = actor.getIntrinsicWeapon();
 		}
@@ -87,26 +92,47 @@ public class AttackAction extends Action {
 		String result = actor + " " + weapon.verb() + " " + target + " for " + damage + " damage.";
 		target.hurt(damage);
 
+		// DEALS WITH PLAYER'S DEATH
+		if (target.hasCapability(Status.PLAYER)){
+			Player player = (Player) target;
+			if (!target.isConscious()){
+				// Retrieve the location before player died.
+				Location previousLocation = player.getMovementList().get(player.getMovementList().size()-3);
+				Rune playerRune = player.getRuneManager().getTotalRunes();
+
+				// Use this instead of drop action because we want to drop at the previous location.
+				player.getRuneManager().removeRunes();
+				map.at(previousLocation.x(),previousLocation.y()).addItem(playerRune);
+
+				// Reset game when player dies.
+				ResetAction resetAction = new ResetAction();
+				result += resetAction.execute(player,map) + "\n";
+				result += "Value of runes dropped: " + playerRune.getRuneValue();
+
+				return result;
+			}
+		}
+
 		// Deals with unconscious actors
-        if (!target.isConscious()) {
+		else if (!target.isConscious()) {
 			// Deals with spawning and de-spawning of skeletal types.
 			// Pile of bones to be added to map
 			PileOfBones pileOfBones = new PileOfBones();
-            if (target instanceof HeavySkeletalSwordsman) {
+			if (target instanceof HeavySkeletalSwordsman) {
 				System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
 				pileOfBones.setPreviousEnemy((Enemy)target);
-                Location pos = map.locationOf(target);
-                map.removeActor(target);
-                map.addActor(pileOfBones, pos);
-            } else {
-                result += new DeathAction(actor).execute(target, map);
-            }
-        }
+				Location pos = map.locationOf(target);
+				map.removeActor(target);
+				map.addActor(pileOfBones, pos);
+			} else {
+				result += new DeathAction(actor).execute(target, map);
+			}
+		}
 		return result;
 	}
 
 	/**
-	 * Describes which target the actor is attacking with which weapon
+	 * Describes which target the actor is attacking with which weapon.
 	 *
 	 * @param actor The actor performing the action.
 	 * @return a description used for the menu UI
@@ -116,26 +142,50 @@ public class AttackAction extends Action {
 		return actor + " attacks " + target + " at " + direction + " with " + (weapon != null ? weapon : "Intrinsic Weapon");
 	}
 
+	/**
+	 * Getter method to retrieve the target.
+	 * @return target of attack
+	 */
 	public Actor getTarget() {
 		return target;
 	}
 
+	/**
+	 * Setter method to set the target.
+	 * @param target target of attack
+	 */
 	public void setTarget(Actor target) {
 		this.target = target;
 	}
 
+	/**
+	 * Getter method to get the weapon used for attack.
+	 * @return weapon used for attack.
+	 */
 	public Weapon getWeapon() {
 		return weapon;
 	}
 
+	/**
+	 * Setter method to set the weapon used for attack.
+	 * @param weapon weapon used for attack
+	 */
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
 	}
 
+	/**
+	 * Getter method to get the direction of the attack.
+	 * @return direction of the attack
+	 */
 	public String getDirection() {
 		return direction;
 	}
 
+	/**
+	 * Setter method to set the direction of the attack
+	 * @param direction direction of the attack
+	 */
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}

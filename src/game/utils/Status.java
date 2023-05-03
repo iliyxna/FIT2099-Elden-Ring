@@ -9,6 +9,7 @@ public enum Status {
     HOSTILE_TO_ENEMY,
     RESPAWNABLE,
     RESTING,
+    CAN_DESPAWN_WHEN_RESET, // For future implementation, new enemy added may not be able to be de-spawned
     HEAVY_SKELETAL_SWORDSMAN,
     GIANT_CRAB,
     LONE_WOLF,

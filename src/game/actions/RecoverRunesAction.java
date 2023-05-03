@@ -1,6 +1,5 @@
 package game.actions;
 
-
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
@@ -54,4 +53,3 @@ public class RecoverRunesAction extends PickUpItemAction {
         return actor + " retrieves Runes (value: "+ rune.getRuneValue() + ")";
     }
 }
-

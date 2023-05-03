@@ -1,4 +1,4 @@
-package game.actors;
+package game.utils;
 
 import java.util.Scanner;
 

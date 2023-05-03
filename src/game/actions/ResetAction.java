@@ -95,4 +95,3 @@ public class ResetAction extends Action {
         return "Game has been reset.";
     }
 }
-

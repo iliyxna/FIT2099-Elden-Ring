@@ -11,13 +11,34 @@ import game.actors.HeavySkeletalSwordsman;
 
 import java.util.Random;
 
+/**
+ * An action to perform the Quickstep unique skill.
+ * This is the unique skill of the Great Knife weapon.
+ * @see AttackAction
+ */
 public class QuickstepAttackAction extends AttackAction{
+    /**
+     * Random number generator
+     */
     private Random rand = new Random();
 
+    /**
+     * Constructor for QuickstepAttackAction class.
+     * @param target target of the attack
+     * @param direction direction of the attack
+     * @param weapon weapon used for the attack
+     */
     public QuickstepAttackAction(Actor target, String direction, WeaponItem weapon){
         super(target,direction,weapon);
     }
 
+    /**
+     * When executed, the chance to hit of the weapon that the Actor used is computed to determine whether
+     * the actor will hit the target. If so, deal damage to the target and determine whether the target is killed.
+     * This unique skill will allow players to move away from the target after the attack has been performed.
+     * @param actor The actor performing the attack action.
+     * @param map The map the actor is on.
+     */
     @Override
     public String execute(Actor actor, GameMap map) {
         if (!(rand.nextInt(100) <= 60)) {
@@ -29,6 +50,7 @@ public class QuickstepAttackAction extends AttackAction{
         String result = actor + " " + this.getWeapon().verb() + " " + this.getTarget() + " for " + damage + " damage.";
         this.getTarget().hurt(damage);
 
+        // Move away from target to prevent being attacked if the location does not contain an actor
         for (Exit exit: map.locationOf(actor).getExits()){
             Location location = exit.getDestination();
             if (!location.containsAnActor() && location.canActorEnter(actor)){
@@ -53,6 +75,11 @@ public class QuickstepAttackAction extends AttackAction{
         return result;
     }
 
+    /**
+     * Description of the Quickstep attack action.
+     * @param actor The actor performing the action.
+     * @return a description of the Quickstep attack action.
+     */
     @Override
     public String menuDescription(Actor actor) {
         return actor + " performs Unsheathe Skill to " + this.getTarget() + " at " + this.getDirection() + " with " + this.getWeapon() ;

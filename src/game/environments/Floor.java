@@ -12,10 +12,18 @@ import game.utils.Status;
  *
  */
 public class Floor extends Ground {
+	/**
+	 * Constructor for Floor class.
+	 */
 	public Floor() {
 		super('_');
 	}
 
+	/**
+	 * To check which actor can enter floor.
+	 * @param actor the Actor to check
+	 * @return true if actor can enter, false otherwise.
+	 */
 	@Override
 	public boolean canActorEnter(Actor actor) {
 		// Only players and traders are allowed to enter floor

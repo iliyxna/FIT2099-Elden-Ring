@@ -18,12 +18,26 @@ import game.actors.Trader;
  * @version 1.0
  */
 public class SellWeaponAction extends Action {
+    /**
+     * Weapon to be sold.
+     */
     private Sellable weapon;
 
+    /**
+     * Constructor for SellWeaponAction.
+     * @param weapon weapon to be sold
+     */
     public SellWeaponAction(WeaponItem weapon){
         this.weapon = (Sellable) weapon;
     }
 
+    /**
+     * When executed, check if the item is in the player's inventory. If present, proceed
+     * with transaction.
+     * @param seller The actor performing the action.
+     * @param map The map the actor is on.
+     * @return
+     */
     @Override
     public String execute(Actor seller, GameMap map) {
         String ret = "";
@@ -45,6 +59,11 @@ public class SellWeaponAction extends Action {
         return ret;
     }
 
+    /**
+     * Description of the sell weapon action.
+     * @param actor The actor performing the action.
+     * @return a description of the sell weapon action.
+     */
     @Override
     public String menuDescription(Actor actor) {
         return "Sell Weapon: " + weapon.toString() +  " for $" + weapon.getSellPrice() + " to Merchant Kale";
