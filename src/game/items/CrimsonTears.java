@@ -1,8 +1,6 @@
 package game.items;
 
 import edu.monash.fit2099.engine.items.Item;
-import game.Consumable;
-import game.reset.Resettable;
 import game.utils.Status;
 
 /**
