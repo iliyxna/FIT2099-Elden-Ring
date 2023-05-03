@@ -18,6 +18,8 @@ public class Floor extends Ground {
 
 	@Override
 	public boolean canActorEnter(Actor actor) {
-		return actor.hasCapability(Status.HOSTILE_TO_ENEMY);
+		// Only players and traders are allowed to enter floor
+		// This is to prevent enemies from entering
+		return actor.hasCapability(Status.CAN_ENTER_FLOOR);
 	}
 }

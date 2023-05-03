@@ -14,6 +14,7 @@ public enum Status {
     LONE_WOLF,
     PILE_OF_BONES,
     CAN_ENTER_FLOOR,
+    SITE_OF_LOSTGRACE,
     ENEMY,
     PLAYER,
     CONSUMABLE,  // for items

@@ -27,7 +27,6 @@ import game.weapons.Grossmesser;
 public class Player extends Actor implements Resettable {
 
 	private final Menu menu = new Menu();
-	private int crimsonFlaskCount = 2;
 
 
 	/**
@@ -43,8 +42,6 @@ public class Player extends Actor implements Resettable {
 		this.addCapability(Status.PLAYER);
 		this.addCapability(Status.CAN_ENTER_FLOOR);
 		this.addWeaponToInventory(new Club());
-		this.addItemToInventory(new CrimsonTears());
-		this.addItemToInventory(new CrimsonTears());
 
 	}
 
@@ -59,7 +56,6 @@ public class Player extends Actor implements Resettable {
 		}
 		// Display number of runes player is holding
 		System.out.println("Player's current health: " + this.printHp());
-		//System.out.println("Number of Crimson Flasks: " + getCrimsonFlaskCount());
 
 
 		// Deal with Grossmesser AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
@@ -76,17 +72,10 @@ public class Player extends Actor implements Resettable {
 
 		}
 
-//			// Only print consume action if consumable item is in inventory
-//			for (Item item : this.getItemInventory()) {
-////			if (item.hasCapability(Status.CONSUMABLE)){
-////				actions.add(new ConsumeAction(item));
-//			}
-
-		// Only print consume action if consumable item is in inventory
-			for (Item item: this.getItemInventory()){
-				if (item.hasCapability(Status.CONSUMABLE)){
-					actions.add(new ConsumeAction(item));
-				}
+			// Only print consume action if consumable item is in inventory
+			for (Item item : this.getItemInventory()) {
+//			if (item.hasCapability(Status.CONSUMABLE)){
+//				actions.add(new ConsumeAction(item));
 			}
 
 		// return/print the console menu
@@ -101,14 +90,6 @@ public class Player extends Actor implements Resettable {
 	@Override
 	public IntrinsicWeapon getIntrinsicWeapon() {
 		return new IntrinsicWeapon(11, "punches", 100);
-	}
-
-	public int getCrimsonFlaskCount() {
-		return crimsonFlaskCount;
-	}
-
-	public void decreaseCrimsonFlaskCount() {
-		this.crimsonFlaskCount--;
 	}
 
 }

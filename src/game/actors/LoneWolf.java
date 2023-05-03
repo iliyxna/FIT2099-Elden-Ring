@@ -17,6 +17,7 @@ public class LoneWolf extends Enemy {
     public LoneWolf() {
         super("Lone Wolf", 'h', 102, 55, 1470);
         this.addCapability(Status.LONE_WOLF);
+        this.addCapability(Status.DOG_TYPE);
     }
 
     @Override
