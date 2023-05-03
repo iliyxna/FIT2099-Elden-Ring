@@ -1,5 +1,7 @@
 package game.reset;
 
+import edu.monash.fit2099.engine.positions.GameMap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,17 @@ public class ResetManager {
     private static ResetManager instance;
 
     /**
+     * Get the singleton instance of reset manager
+     * @return ResetManager singleton instance
+     */
+    public static ResetManager getInstance(){
+        if(instance == null){
+            instance = new ResetManager();
+        }
+        return instance;
+    }
+
+    /**
      * HINT 1: where have we seen a private constructor before?
      * HINT 2: see the instance attribute above.
      */
@@ -22,9 +35,32 @@ public class ResetManager {
         this.resettables = new ArrayList<>();
     }
 
-    public void run() {}
+    /**
+     * Reset the game by traversing through all the resettable objects in the list.
+     */
+    public void run(GameMap map) {
 
-    public void registerResettable(Resettable resettable) {}
+        for (Resettable resettable : resettables){
+            resettable.reset(map);
+        }
+        resettables.clear();
+    }
 
-    public void removeResettable(Resettable resettable) {}
+    /**
+     * A method to add a resettable object to the list of resettable objects.
+     * @param resettable resettable object to be added
+     */
+    public void registerResettable(Resettable resettable) {
+        this.resettables.add(resettable);
+    }
+
+    /**
+     * Remove a resettable object from the list of resettable objects.
+     * @param resettable resettable object to be removed
+     */
+    public void removeResettable(Resettable resettable) {
+        this.resettables.remove(resettable);
+    }
+
+    public List<Resettable> getResettables(){return this.resettables;}
 }
