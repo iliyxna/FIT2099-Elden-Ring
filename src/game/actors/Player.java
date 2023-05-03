@@ -255,6 +255,6 @@ public class Player extends Actor implements Resettable{
 	 */
 	@Override
 	public IntrinsicWeapon getIntrinsicWeapon() {
-		return new IntrinsicWeapon(1100, "punches", 100);
+		return new IntrinsicWeapon(11, "punches", 100);
 	}
 }

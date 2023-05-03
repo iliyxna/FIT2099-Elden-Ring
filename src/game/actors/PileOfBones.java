@@ -66,7 +66,12 @@ public class PileOfBones extends Actor implements Resettable {
 
         }else if (counter == 3 && this.isConscious()){
             map.removeActor(this);
-            map.addActor(new HeavySkeletalSwordsman(), pos);
+            if(this.previousEnemy.getClass() == HeavySkeletalSwordsman.class){
+                map.addActor(new HeavySkeletalSwordsman(), pos);
+            }else{
+                map.addActor(new SkeletalBandit(), pos);
+            }
+
         }
 
         counter += 1;
