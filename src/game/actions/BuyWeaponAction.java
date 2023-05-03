@@ -63,7 +63,7 @@ public class BuyWeaponAction extends Action {
      */
     @Override
     public String menuDescription(Actor actor) {
-        return "Buy Weapon: " + weapon.toString() + " for $" + weapon.getBuyPrice() + " from Merchant Kale.";
+        return "Buy Weapon: " + weapon.toString() + " for $" + weapon.getBuyPrice().getRuneValue() + " from Merchant Kale.";
     }
 
 }
