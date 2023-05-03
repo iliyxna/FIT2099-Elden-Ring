@@ -124,7 +124,7 @@ public abstract class Enemy extends Actor implements Resettable {
             }
 
             // Player can choose to attack with intrinsic weapon
-            actions.add(new AttackAction(this, direction, getIntrinsicWeapon()));
+            actions.add(new AttackAction(this, direction, otherActor.getIntrinsicWeapon()));
 
             // If player has weapon, can choose to fight with weaponItem
             if (otherActor.getWeaponInventory().size() != 0) {

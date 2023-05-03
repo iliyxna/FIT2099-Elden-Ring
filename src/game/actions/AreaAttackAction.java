@@ -9,12 +9,11 @@ import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
-import game.actors.Enemy;
-import game.actors.HeavySkeletalSwordsman;
-import game.actors.PileOfBones;
-import game.actors.Player;
+import game.actors.*;
 import game.rune.Rune;
 import game.utils.Status;
+import game.weapons.Grossmesser;
+import game.weapons.Scimitar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,16 +95,21 @@ public class AreaAttackAction extends Action implements AreaAttack {
                 Actor target = location.getActor();
                 target.hurt(damage);
 
-                // DEALS WITH PLAYER'S DEATH
+                /// DEALS WITH PLAYER'S DEATH
                 if (target.hasCapability(Status.PLAYER)){
                     Player player = (Player) target;
                     if (!target.isConscious()){
                         // Retrieve the location before player died.
-                        Location previousLocation = player.getMovementList().get(player.getMovementList().size()-3);
+                        Location dropLocation;
+                        if (player.getMovementList().size() <= 1){
+                            dropLocation = map.locationOf(player);
+                        } else {
+                            dropLocation = player.getMovementList().get(player.getMovementList().size()-2);
+                        }
                         Rune playerRune = player.getRuneManager().getTotalRunes();
                         // Use this instead of drop action because we want to drop at the previous location.
                         player.getRuneManager().removeRunes();
-                        map.at(previousLocation.x(),previousLocation.y()).addItem(playerRune);
+                        map.at(dropLocation.x(),dropLocation.y()).addItem(playerRune);
 
                         // Reset game when player dies
                         ResetAction resetAction = new ResetAction();
@@ -122,12 +126,21 @@ public class AreaAttackAction extends Action implements AreaAttack {
                     // Pile of bones to be added to map
                     PileOfBones pileOfBones = new PileOfBones();
                     if (target instanceof HeavySkeletalSwordsman) {
-                        System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
                         pileOfBones.setPreviousEnemy((Enemy)target);
                         Location pos = map.locationOf(target);
                         map.removeActor(target);
                         map.addActor(pileOfBones, pos);
-                    } else {
+                        pileOfBones.addWeaponToInventory(new Grossmesser());
+                        System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
+                    } else if (target instanceof SkeletalBandit){
+
+                        pileOfBones.setPreviousEnemy((Enemy)target);
+                        Location pos = map.locationOf(target);
+                        map.removeActor(target);
+                        map.addActor(pileOfBones, pos);
+                        pileOfBones.addWeaponToInventory(new Scimitar());
+                        System.out.println("Skeletal Bandit turns into Pile of Bones.");
+                    }else{
                         result += new DeathAction(actor).execute(target, map);
                     }
                 }

@@ -9,17 +9,15 @@ import edu.monash.fit2099.engine.positions.Exit;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.displays.Menu;
 import edu.monash.fit2099.engine.positions.Location;
+import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actions.*;
 import game.items.CrimsonTears;
 import game.rune.RuneManager;
 import game.utils.RoleManager;
-import game.weapons.Club;
+import game.weapons.*;
 import game.reset.Resettable;
 import game.utils.Status;
-import game.weapons.GreatKnife;
-import game.weapons.Grossmesser;
-import game.weapons.Uchigatana;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +82,7 @@ public class Player extends Actor implements Resettable{
 		this.addCapability(Status.CAN_ENTER_FLOOR);
 		this.addCapability(Status.SITE_OF_LOSTGRACE);
 
+
 		// depending on class, the hitpoints will change
 		chooseClass();
 
@@ -124,7 +123,7 @@ public class Player extends Actor implements Resettable{
 		// Deal with Grossmesser AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
 		if (this.getWeaponInventory().size() != 0){
 			WeaponItem currentWeapon = this.getWeaponInventory().get(0);
-			if (currentWeapon.getClass() == Grossmesser.class ){
+			if (currentWeapon.getClass() == (Grossmesser.class) || currentWeapon.getClass() == (Scimitar.class)){
 				for (Exit exit : playerLocation.getExits()) {
 					Location destination = exit.getDestination();
 					if (destination.containsAnActor()) {
@@ -243,6 +242,19 @@ public class Player extends Actor implements Resettable{
 		// Reset the number of uses of crimson flask to max num of uses
 		this.crimsonFlaskCount = 2;
 
-		setPreviousRuneLocation(movementList.get(movementList.size()-3));
+		if (this.getMovementList().size() <= 1){
+			setPreviousRuneLocation(map.locationOf(this));
+		} else {
+			setPreviousRuneLocation(movementList.get(movementList.size()-2));
+		}
+	}
+
+	/**
+	 * Getter method for the intrinsic weapon used by player
+	 * @return the intrinsic weapon used by player
+	 */
+	@Override
+	public IntrinsicWeapon getIntrinsicWeapon() {
+		return new IntrinsicWeapon(1100, "punches", 100);
 	}
 }

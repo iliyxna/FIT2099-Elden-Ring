@@ -13,6 +13,7 @@ import game.actions.DespawnAction;
 import game.reset.Resettable;
 import game.utils.Status;
 import game.weapons.Grossmesser;
+import game.weapons.Scimitar;
 
 /**
  * Class representing the pile of bones. Any enemy with Skeletal type
@@ -40,7 +41,6 @@ public class PileOfBones extends Actor implements Resettable {
      */
     public PileOfBones() {
         super("Pile of Bones",'X',1);
-        this.addWeaponToInventory(new Grossmesser());
         this.addCapability(Status.SKELETAL_TYPE);
         this.addCapability(Status.PILE_OF_BONES);
         this.addCapability(Status.CAN_DESPAWN_WHEN_RESET);
@@ -113,7 +113,7 @@ public class PileOfBones extends Actor implements Resettable {
      * @return the enemy before turning into pile of bones.
      */
     public Enemy getPreviousEnemy() {
-        return previousEnemy;
+        return this.previousEnemy;
     }
 
     /**

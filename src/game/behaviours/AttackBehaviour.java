@@ -46,7 +46,12 @@ public class AttackBehaviour implements Behaviour {
                     // Crab slam attack
                     if(actor.hasCapability(Status.GIANT_CRAB) && (!target.hasCapability(Status.WATER_TYPE))){
                         return new AreaAttackAction();
+                    }else if(actor.hasCapability(Status.GIANT_DOG) && (!target.hasCapability(Status.DOG_TYPE))) {
+                        return new AreaAttackAction();
+                    }else if(actor.hasCapability(Status.GIANT_CRAYFISH) && (!target.hasCapability(Status.WATER_TYPE))){
+                        return new AreaAttackAction();
                     }
+
                     // For weapon skills (Grossmesser, Scimitar)
                     if (actor.getWeaponInventory().size() != 0){
                         weapon = actor.getWeaponInventory().get(0);

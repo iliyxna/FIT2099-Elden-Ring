@@ -14,10 +14,7 @@ import game.actions.BuyWeaponAction;
 import game.actions.SellWeaponAction;
 import game.rune.Rune;
 import game.utils.Status;
-import game.weapons.Club;
-import game.weapons.GreatKnife;
-import game.weapons.Grossmesser;
-import game.weapons.Uchigatana;
+import game.weapons.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,12 +47,13 @@ public class Trader extends Actor {
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map){
         ActionList actionList = new ActionList();
-        Player player = (Player) otherActor;
+//        Player player = (Player) otherActor;
 
         // Player buy weapon from trader
         actionList.add(new BuyWeaponAction(new Club()));
         actionList.add(new BuyWeaponAction(new GreatKnife()));
         actionList.add(new BuyWeaponAction(new Uchigatana()));
+        actionList.add(new BuyWeaponAction(new Scimitar()));
         // Player sell weapon to trader
         for (WeaponItem weapon : otherActor.getWeaponInventory()){
             actionList.add(new SellWeaponAction(weapon));

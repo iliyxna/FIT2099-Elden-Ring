@@ -102,7 +102,7 @@ public class Application {
 		world.addPlayer(player, gameMap.at(36, 10));
 
 //		world.addPlayer(player, gameMap.at(32, 10));
-//		gameMap.at(31,9).addActor(new GiantCrab());
+//		gameMap.at(35,10).addActor(new SkeletalBandit());
 
 		// Activate the first site of lost grace
 		Location TheFirstStep = new Location(gameMap,38,11);

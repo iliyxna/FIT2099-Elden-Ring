@@ -8,6 +8,9 @@ import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actors.Enemy;
 import game.actors.PileOfBones;
 import game.actors.HeavySkeletalSwordsman;
+import game.actors.SkeletalBandit;
+import game.weapons.Grossmesser;
+import game.weapons.Scimitar;
 
 import java.util.Random;
 
@@ -60,15 +63,25 @@ public class QuickstepAttackAction extends AttackAction{
 
         // Deals with unconscious actors
         if (!this.getTarget().isConscious()) {
-            // Deals with spawning and de-spawning of heavy skeletal swordsman
+            // Deals with spawning and de-spawning of skeletal types.
+            // Pile of bones to be added to map
             PileOfBones pileOfBones = new PileOfBones();
             if (this.getTarget() instanceof HeavySkeletalSwordsman) {
-                System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
                 pileOfBones.setPreviousEnemy((Enemy)this.getTarget());
                 Location pos = map.locationOf(this.getTarget());
                 map.removeActor(this.getTarget());
                 map.addActor(pileOfBones, pos);
-            } else {
+                pileOfBones.addWeaponToInventory(new Grossmesser());
+                System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
+            } else if (this.getTarget() instanceof SkeletalBandit){
+
+                pileOfBones.setPreviousEnemy((Enemy)this.getTarget());
+                Location pos = map.locationOf(this.getTarget());
+                map.removeActor(this.getTarget());
+                map.addActor(pileOfBones, pos);
+                pileOfBones.addWeaponToInventory(new Scimitar());
+                System.out.println("Skeletal Bandit turns into Pile of Bones.");
+            }else{
                 result += new DeathAction(actor).execute(this.getTarget(), map);
             }
         }
