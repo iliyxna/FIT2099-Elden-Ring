@@ -81,7 +81,7 @@ public class ResetAction extends Action {
 
         res += actor + " has recovered full HP by resting\n";
         res += "Maximum uses of Crimson Flask has been reset to " + player.getCrimsonFlaskCount() +"\n";
-        res += "All enemies have been de-spawned";
+        res += "All enemies have been de-spawned\n";
         return res;
     }
 

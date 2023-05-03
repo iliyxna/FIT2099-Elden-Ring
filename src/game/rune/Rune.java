@@ -45,7 +45,7 @@ public class Rune extends Item  {
 
     @Override
     public String toString() {
-        return "runes";
+        return runeValue + "";
     }
 
     /**

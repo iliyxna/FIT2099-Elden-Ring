@@ -59,14 +59,14 @@ public class DeathAction extends Action {
             if (target.hasCapability(Status.ENEMY)) {
                 Enemy targetEnemy = (Enemy) target;
                 player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
-                System.out.println("Runes gained from killing "+ targetEnemy + ": " + targetEnemy.getEnemyRuneValue());
+                System.out.println("Runes gained from killing "+ targetEnemy + ": $" + targetEnemy.getEnemyRuneValue());
             } else if (target.hasCapability(Status.PILE_OF_BONES)) {
                 // pile of bones could previously be HSS or Skeletal bandit
                 PileOfBones pileOfBones = (PileOfBones) target;
                 // HSS or skeletal bandit?
                 Enemy targetEnemy = pileOfBones.getPreviousEnemy();
                 player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
-                System.out.println("Runes gained from killing "+ targetEnemy + ": " + targetEnemy.getEnemyRuneValue());
+                System.out.println("Runes gained from killing "+ targetEnemy + ": $" + targetEnemy.getEnemyRuneValue());
             }
         }
         // remove actor

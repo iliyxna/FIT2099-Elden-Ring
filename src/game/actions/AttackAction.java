@@ -110,7 +110,7 @@ public class AttackAction extends Action {
 				// Reset game when player dies
 				ResetAction resetAction = new ResetAction();
 				result += resetAction.execute(player,map);
-				result += "Value of runes dropped: " + playerRune.getRuneValue();
+				result += "Value of runes dropped: $" + playerRune.getRuneValue();
 
 				return result;
 			}

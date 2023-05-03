@@ -40,7 +40,7 @@ public class RecoverRunesAction extends PickUpItemAction {
         map.locationOf(actor).removeItem(rune);
         // Recover rune (added to the number of runes they currently hold)
         ((Player)actor).getRuneManager().addRunes(rune.getRuneValue());
-        return actor + " retrieves Runes (value: "+ rune.getRuneValue() + ")";
+        return actor + " retrieves Runes (value: $"+ rune.getRuneValue() + ")";
     }
 
     /**
@@ -50,6 +50,6 @@ public class RecoverRunesAction extends PickUpItemAction {
      */
     @Override
     public String menuDescription(Actor actor) {
-        return actor + " retrieves Runes (value: "+ rune.getRuneValue() + ")";
+        return actor + " retrieves Runes (value: $"+ rune.getRuneValue() + ")";
     }
 }

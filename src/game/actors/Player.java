@@ -14,6 +14,7 @@ import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actions.*;
 import game.items.CrimsonTears;
 import game.rune.RuneManager;
+import game.utils.MapSize;
 import game.utils.RoleManager;
 import game.weapons.*;
 import game.reset.Resettable;
@@ -37,6 +38,7 @@ import java.util.List;
  */
 public class Player extends Actor implements Resettable{
 	private final Menu menu = new Menu();
+
 
 	/**
 	 * Rune manager to manage player's runes.
@@ -103,6 +105,9 @@ public class Player extends Actor implements Resettable{
 	@Override
 	public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
 		Location playerLocation = map.locationOf(this);
+		if(MapSize.getPlayerMap() == null){
+			MapSize.setPlayerMap(map);
+		}
 		movementList.add(playerLocation);
 
 		// Handle multi-turn Actions
@@ -257,4 +262,5 @@ public class Player extends Actor implements Resettable{
 	public IntrinsicWeapon getIntrinsicWeapon() {
 		return new IntrinsicWeapon(11, "punches", 100);
 	}
+
 }
