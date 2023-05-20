@@ -54,6 +54,7 @@ public class Trader extends Actor {
         actionList.add(new BuyWeaponAction(new GreatKnife()));
         actionList.add(new BuyWeaponAction(new Uchigatana()));
         actionList.add(new BuyWeaponAction(new Scimitar()));
+        actionList.add(new BuyWeaponAction(new HeavyCrossbow()));
         // Player sell weapon to trader
         for (WeaponItem weapon : otherActor.getWeaponInventory()){
             actionList.add(new SellWeaponAction(weapon));
