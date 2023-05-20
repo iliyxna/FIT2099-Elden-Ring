@@ -25,5 +25,6 @@ public enum Status {
     DOG_TYPE,   // Lone wolf, Giant dog
     WATER_TYPE, // Giant crab, Giant crayfish
     ENEMY_WEAPON_SKILL,
-    UNIQUE_SKILL
+    UNIQUE_SKILL,
+    RANGED_ATTACK
 }
