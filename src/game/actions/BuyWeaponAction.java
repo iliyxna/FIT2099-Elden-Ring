@@ -23,11 +23,17 @@ public class BuyWeaponAction extends Action {
     private Purchasable weapon;
 
     /**
+     * Trader that deals with transaction
+     */
+    private Trader trader;
+
+    /**
      * Constructor for BuyWeaponAction.
      * @param weapon weapon to be purchased
      */
-    public BuyWeaponAction(WeaponItem weapon){
+    public BuyWeaponAction(WeaponItem weapon, Trader trader){
         this.weapon = (Purchasable) weapon;
+        this.trader = trader;
     }
 
     /**
@@ -35,6 +41,7 @@ public class BuyWeaponAction extends Action {
      * runes, proceed with transaction.
      * @param buyer The actor performing the action.
      * @param map The map the actor is on.
+     * @return a string representing result of the action.
      */
     @Override
     public String execute(Actor buyer, GameMap map) {
@@ -63,7 +70,7 @@ public class BuyWeaponAction extends Action {
      */
     @Override
     public String menuDescription(Actor actor) {
-        return "Buy Weapon: " + weapon.toString() + " for $" + weapon.getBuyPrice().getRuneValue() + " from Merchant Kale.";
+        return "Buy Weapon: " + weapon.toString() + " for $" + weapon.getBuyPrice().getRuneValue() + " from " + trader;
     }
 
 }

@@ -12,7 +12,7 @@ import game.actors.Trader;
 /**
  * An action class that allows Player to sell weapon to Trader.
  * Note that it's from PLAYER to TRADER
- * @author Iliyana Samsudin
+ * @author Iliyana
  * @see Action
  * @see Trader
  * @version 1.0
@@ -24,11 +24,18 @@ public class SellWeaponAction extends Action {
     private Sellable weapon;
 
     /**
+     * Trader that deals with transaction.
+     */
+    private Trader trader;
+
+    /**
      * Constructor for SellWeaponAction.
      * @param weapon weapon to be sold
+     * @param trader trader that deals with transaction
      */
-    public SellWeaponAction(WeaponItem weapon){
+    public SellWeaponAction(WeaponItem weapon, Trader trader){
         this.weapon = (Sellable) weapon;
+        this.trader = trader;
     }
 
     /**
@@ -36,7 +43,6 @@ public class SellWeaponAction extends Action {
      * with transaction.
      * @param seller The actor performing the action.
      * @param map The map the actor is on.
-     * @return
      */
     @Override
     public String execute(Actor seller, GameMap map) {
@@ -66,7 +72,7 @@ public class SellWeaponAction extends Action {
      */
     @Override
     public String menuDescription(Actor actor) {
-        return "Sell Weapon: " + weapon.toString() +  " for $" + weapon.getSellPrice().getRuneValue() + " to Merchant Kale";
+        return "Sell Weapon: " + weapon.toString() +  " for $" + weapon.getSellPrice().getRuneValue() + " to " + trader;
     }
 
 }

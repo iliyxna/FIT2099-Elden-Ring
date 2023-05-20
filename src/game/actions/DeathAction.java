@@ -3,19 +3,24 @@ package game.actions;
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actions.ActionList;
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actors.Enemy;
+import game.actors.GodrickTheGrafted;
 import game.actors.PileOfBones;
 import game.actors.Player;
+import game.environments.GoldenFogDoor;
+import game.environments.SiteOfLostGrace;
+import game.utils.FancyMessage;
 import game.utils.Status;
 
 /**
  * An action executed if an actor is killed.
  * Created by:
  * @author Adrian Kristanto
- * Modified by:
+ * Modified by: Iliyana, Damia
  *
  */
 public class DeathAction extends Action {
@@ -45,11 +50,30 @@ public class DeathAction extends Action {
         String result = "";
 
         ActionList dropActions = new ActionList();
-        // drop all items
-        for (Item item : target.getItemInventory())
-            dropActions.add(item.getDropAction(target));
-        for (WeaponItem weapon : target.getWeaponInventory())
-            dropActions.add(weapon.getDropAction(target));
+
+        // Demigod will only drop Remebrance of the Grafted
+        if (target.hasCapability(Status.DEMIGOD)){
+            for (Item item : target.getItemInventory()){
+                dropActions.add(item.getDropAction(target));
+            }
+            result += FancyMessage.DEMIGOD_FELLED;
+            SiteOfLostGrace godrickTheGrafted = new SiteOfLostGrace();
+            map.at(((GodrickTheGrafted)target).getLastLocation().x(),((GodrickTheGrafted)target).getLastLocation().y()).setGround(godrickTheGrafted);
+
+            // EXTRA: so that player can leave the room only after Godrick dies.
+            GoldenFogDoor newBossDoor = new GoldenFogDoor();
+            map.at(1,1).setGround(newBossDoor);
+            newBossDoor.addDestination("to Boss Room", ((Player)attacker).getMapOfLastLostGrace().at(36, 11));
+        }
+        // other enemies will drop items, weapons
+        else {
+            for (Item item : target.getItemInventory())
+                dropActions.add(item.getDropAction(target));
+            for (WeaponItem weapon : target.getWeaponInventory())
+                dropActions.add(weapon.getDropAction(target));
+        }
+
+        // execute drop items
         for (Action drop : dropActions)
             drop.execute(target, map);
 
@@ -59,14 +83,14 @@ public class DeathAction extends Action {
             if (target.hasCapability(Status.ENEMY)) {
                 Enemy targetEnemy = (Enemy) target;
                 player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
-                System.out.println("Runes gained from killing "+ targetEnemy + ": $" + targetEnemy.getEnemyRuneValue());
+                new Display().println("Runes gained from killing "+ targetEnemy + ": $" + targetEnemy.getEnemyRuneValue());
             } else if (target.hasCapability(Status.PILE_OF_BONES)) {
                 // pile of bones could previously be HSS or Skeletal bandit
                 PileOfBones pileOfBones = (PileOfBones) target;
                 // HSS or skeletal bandit?
                 Enemy targetEnemy = pileOfBones.getPreviousEnemy();
                 player.getRuneManager().addRunes(targetEnemy.getEnemyRuneValue().getRuneValue());
-                System.out.println("Runes gained from killing "+ targetEnemy + ": $" + targetEnemy.getEnemyRuneValue());
+                new Display().println("Runes gained from killing "+ targetEnemy + ": $" + targetEnemy.getEnemyRuneValue());
             }
         }
         // remove actor

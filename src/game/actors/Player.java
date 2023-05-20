@@ -12,9 +12,12 @@ import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actions.*;
-import game.items.CrimsonTears;
+import game.items.*;
+import game.reset.ResetManager;
+import game.rune.Rune;
 import game.rune.RuneManager;
 import game.utils.MapSize;
+import game.utils.PlayerResetStatus;
 import game.utils.RoleManager;
 import game.weapons.*;
 import game.reset.Resettable;
@@ -39,7 +42,6 @@ import java.util.List;
 public class Player extends Actor implements Resettable{
 	private final Menu menu = new Menu();
 
-
 	/**
 	 * Rune manager to manage player's runes.
 	 */
@@ -62,6 +64,11 @@ public class Player extends Actor implements Resettable{
 	private Location lastSiteOfLostGrace;
 
 	/**
+	 * Map of the last lost grace.
+	 */
+	private GameMap mapOfLastLostGrace;
+
+	/**
 	 * A list of locations of the movements of the player.
 	 */
 	private List<Location> movementList = new ArrayList<>();
@@ -72,6 +79,23 @@ public class Player extends Actor implements Resettable{
 	private Location previousRuneLocation;
 
 	/**
+	 * Stores the map that contains the runes that was previously dropped by the player.
+	 */
+	private GameMap mapOfPreviousRune;
+
+	/**
+	 * For calculating the price for upgrading HP in site of lost grace.
+	 */
+	private int upgradeHPCount;
+
+	/**
+	 * For other classes to check if player is dead
+	 */
+	private static boolean isPlayerDead;
+
+	private Poisonous lastPoisonousItemConsumed;
+
+	/**
 	 * Constructor for Player class. The chooseClass() method is invoked in the
 	 * constructor so that player's will get to choose their player class
 	 * (Samurai, Bandit, Wretch) at the start of the game.
@@ -79,18 +103,24 @@ public class Player extends Actor implements Resettable{
 	 */
 	public Player() {
 		super("Tarnished", '@', 300);
+		// add to list of resettables for game reset
+		ResetManager.getInstance().registerResettable(this);
 		this.addCapability(Status.HOSTILE_TO_ENEMY);
 		this.addCapability(Status.PLAYER);
 		this.addCapability(Status.CAN_ENTER_FLOOR);
 		this.addCapability(Status.SITE_OF_LOSTGRACE);
-
-
+		this.upgradeHPCount = 0;
 		// depending on class, the hitpoints will change
 		chooseClass();
 
 		// Add flask of crimson tears
 		this.addItemToInventory(new CrimsonTears());
 		this.addItemToInventory(new CrimsonTears());
+		this.addItemToInventory(new NeutralisingBolus());
+		this.addItemToInventory(new RawMeatDumpling());
+		this.addItemToInventory(new GoldenSeeds());
+
+		this.addItemToInventory(new RemembranceOfTheGrafted());
 		this.runeManager = RuneManager.getInstance();
 	}
 
@@ -105,30 +135,32 @@ public class Player extends Actor implements Resettable{
 	@Override
 	public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
 		Location playerLocation = map.locationOf(this);
-		if(MapSize.getPlayerMap() == null){
-			MapSize.setPlayerMap(map);
-		}
+
+		// To record which map player is on
+		MapSize.setPlayerMap(map);
+
+		// To record the movement of players (Used for dropping runes at previous location before player died)
 		movementList.add(playerLocation);
+
+		if (this.hasCapability(Status.POISONED)){
+			display.println("PLAYER IS POISONED");
+			checkPoisonStatus(lastPoisonousItemConsumed);
+		}
 
 		// Handle multi-turn Actions
 		if (lastAction.getNextAction() != null)
 			return lastAction.getNextAction();
 
 		// Display number of runes player is holding
-		System.out.println(this + "'s current hit points: " + this.printHp());
-		System.out.println(this + "'s rune value: $" + runeManager.getTotalRunes().getRuneValue());
-		System.out.println("Crimson Flask available uses remaining: " + this.getCrimsonFlaskCount());
+		display.println(this + "'s current hit points: " + this.printHp());
+		display.println(this + "'s rune value: $" + runeManager.getTotalRunes().getRuneValue());
+		display.println("Crimson Flask available uses remaining: " + this.getCrimsonFlaskCount());
 
-		// Check if player is at site of lost grace
-		// If at site of lost grace, can choose to rest
-		if (map.locationOf(this).getGround().hasCapability(Status.SITE_OF_LOSTGRACE)) {
-			actions.add(new RestAction());
-		}
-
-		// Deal with Grossmesser AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
+		// Deal with AOE attack to avoid repetition of lines (multiple AOE attack lines for same area) in menu
 		if (this.getWeaponInventory().size() != 0){
 			WeaponItem currentWeapon = this.getWeaponInventory().get(0);
-			if (currentWeapon.getClass() == (Grossmesser.class) || currentWeapon.getClass() == (Scimitar.class)){
+			if (currentWeapon.getClass() == (Grossmesser.class) || currentWeapon.getClass() == (Scimitar.class) ||
+					currentWeapon.getClass() == (AxeOfGodrick.class) || currentWeapon.getClass() == (GraftedDragon.class)) {
 				for (Exit exit : playerLocation.getExits()) {
 					Location destination = exit.getDestination();
 					if (destination.containsAnActor()) {
@@ -172,6 +204,13 @@ public class Player extends Actor implements Resettable{
 	}
 
 	/**
+	 * A method to increase the number of uses for Flask of Crimson Tears by 1.
+	 */
+	public void increaseCrimsonFlaskCount() {
+		this.crimsonFlaskCount++;
+	}
+
+	/**
 	 * Setter method to set the last site of Lost Grace visited by player.
 	 * @param lastSiteOfLostGrace last site of Lost Grace visited by player
 	 */
@@ -188,6 +227,22 @@ public class Player extends Actor implements Resettable{
 	}
 
 	/**
+	 * Getter method to get the map of last lost grace visited.
+	 * @return the last lost grace visited by the player.
+	 */
+	public GameMap getMapOfLastLostGrace() {
+		return mapOfLastLostGrace;
+	}
+
+	/**
+	 * Setter method to set the map of last lost grace visited.
+	 * @param mapOfLastLostGrace last lost grace visited by the player
+	 */
+	public void setMapOfLastLostGrace(GameMap mapOfLastLostGrace) {
+		this.mapOfLastLostGrace = mapOfLastLostGrace;
+	}
+
+	/**
 	 * Getter method for the list of movements of the player.
 	 * @return the list of movements of the player.
 	 */
@@ -195,13 +250,6 @@ public class Player extends Actor implements Resettable{
 		return movementList;
 	}
 
-	/**
-	 * Getter method for the previous rune location of the player.
-	 * @return the previous rune location of the player.
-	 */
-	public Location getPreviousRuneLocation() {
-		return previousRuneLocation;
-	}
 
 	/**
 	 * Setter method for the previous rune location of the player.
@@ -212,27 +260,37 @@ public class Player extends Actor implements Resettable{
 	}
 
 	/**
+	 * Getter method for the previous rune location of the player.
+	 * @return  previousRuneLocation the previous rune location of the player.
+	 */
+	public Location getPreviousRuneLocation() {
+		return previousRuneLocation;
+	}
+
+	/**
+	 * Getter to set previous map of the dropped rune.
+	 * @return  mapOfPreviousRune previous map of the dropped rune.
+	 */
+	public GameMap getMapOfPreviousRune() {
+		return mapOfPreviousRune;
+	}
+
+	/**
+	 * Setter to set previous map of the dropped rune.
+	 * @param mapOfPreviousRune previous map of the dropped rune.
+	 */
+	public void setMapOfPreviousRune(GameMap mapOfPreviousRune) {
+		this.mapOfPreviousRune = mapOfPreviousRune;
+	}
+
+	/**
 	 * A method to print the Role menu item to the console at the start of the game.
 	 * @see RoleManager
 	 */
 	public void chooseClass(){
 		int selection;
-
 		selection = roleManager.menuItem();
-		switch (selection) {
-			case 1 -> {
-				this.addWeaponToInventory(new Uchigatana());
-				this.resetMaxHp(455);
-			}
-			case 2 -> {
-				this.addWeaponToInventory(new GreatKnife());
-				this.resetMaxHp(414);
-			}
-			case 3 -> {
-				this.addWeaponToInventory(new Club());
-				this.resetMaxHp(414);
-			}
-		}
+		roleManager.selectedClass(this, selection);
 	}
 
 	/**
@@ -242,15 +300,30 @@ public class Player extends Actor implements Resettable{
 	@Override
 	public void reset(GameMap map) {
 		// Reset player's hit points to maximum
-		this.resetMaxHp(this.maxHitPoints);
-
+		this.resetMaxHp(getPlayerMaxHP());
+		new Display().println(this + "'s HP has been reset to: " + this.hitPoints);
 		// Reset the number of uses of crimson flask to max num of uses
 		this.crimsonFlaskCount = 2;
 
-		if (this.getMovementList().size() <= 1){
-			setPreviousRuneLocation(map.locationOf(this));
-		} else {
-			setPreviousRuneLocation(movementList.get(movementList.size()-2));
+		// If player is dead then drop runes. If player is just resting, runes will not be dropped.
+		if (getIsPlayerDead()){
+			// Dropping on runes
+			// Retrieve the location before player died.
+			Location dropLocation;
+			if (this.getMovementList().size() <= 1){
+				dropLocation = map.locationOf(this);
+			} else {
+				dropLocation = this.getMovementList().get(this.getMovementList().size()-2);
+			}
+
+			Rune playerRune = this.getRuneManager().getTotalRunes();
+
+			// Use this instead of drop action because we want to drop at the previous location.
+			this.getRuneManager().removeRunes();
+			map.at(dropLocation.x(),dropLocation.y()).addItem(playerRune);
+			// need to keep track of previous rune location and which map it was dropped on
+			this.setPreviousRuneLocation(dropLocation);
+			this.setMapOfPreviousRune(map);
 		}
 	}
 
@@ -263,4 +336,65 @@ public class Player extends Actor implements Resettable{
 		return new IntrinsicWeapon(11, "punches", 100);
 	}
 
+	/**
+	 * Getter method to get the number of HP upgrades.
+	 * @return number of HP upgrades done by player
+	 */
+	public int getUpgradeHPCount() {
+		return upgradeHPCount;
+	}
+
+	/**
+	 * Increase the number of HP upgrades by 1.
+	 */
+	public void increaseUpgradeHPCount(){
+		this.upgradeHPCount++;
+	}
+
+	/**
+	 * Getter method to retrieve the max HP of player.
+	 * @return max HP of player
+	 */
+	public int getPlayerMaxHP(){
+		return this.maxHitPoints;
+	}
+
+	/**
+	 * Getter method that returns a boolean value depending on the player being dead or not.
+	 * @return true if player is dead, false otherwise.
+	 */
+	public static boolean getIsPlayerDead() {
+		return isPlayerDead;
+	}
+
+	/**
+	 * Setter method to set the boolean value to true if player is dead and false if not dead.
+	 * @param isPlayerDead true if player is dead, false otherwise.
+	 */
+	public static void setIsPlayerDead(boolean isPlayerDead) {
+		Player.isPlayerDead = isPlayerDead;
+	}
+
+	/**
+	 * Method that checks whether player is poisoned or not. If poisoned, then inflict damage.
+	 * During the last round, remove the poisoned status.
+	 * @param poisonousItem a poisonous item that was consumed by the player
+	 */
+	public void checkPoisonStatus(Poisonous poisonousItem){
+		if (poisonousItem.getRounds() > 0){
+			poisonousItem.inflictDamage(this);
+			poisonousItem.decreaseRounds();
+		}
+		if (poisonousItem.getRounds() == 0){
+			this.removeCapability(Status.POISONED);
+		}
+	}
+
+	/**
+	 * Setter method to set the last poisonous item consumed by the player.
+	 * @param lastPoisonousItemConsumed last poisonous item consumed by the player.
+	 */
+	public void setLastPoisonousItemConsumed(Poisonous lastPoisonousItemConsumed) {
+		this.lastPoisonousItemConsumed = lastPoisonousItemConsumed;
+	}
 }
