@@ -1,10 +1,14 @@
 package game.items;
 
+import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
+import game.actors.Player;
 import game.utils.Status;
 
 /**
  * Class representing the Flask of Crimson Tears.
+ * @author Mustafa Khan
+ * Modified by: Iliyana
  */
 public class CrimsonTears extends Item implements Consumable {
     /**
@@ -20,14 +24,20 @@ public class CrimsonTears extends Item implements Consumable {
         this.addCapability(Status.CONSUMABLE);
     }
 
-    /**
-     * Getter method for the heal amount.
-     * @return the healing amount.
-     */
     @Override
-    public int getHealAmount() {
-        return this.HEAL_AMOUNT;
+    public String consumeItem(Actor actor) {
+        String ret = "";
+        if (actor.hasCapability(Status.PLAYER)){
+            Player player = (Player) actor;
+            if (player.getCrimsonFlaskCount() != 0){
+                player.heal(HEAL_AMOUNT);
+                player.removeItemFromInventory(this);
+                player.decreaseCrimsonFlaskCount();
+                ret +=  this + " has been consumed.";
+            } else if (player.getCrimsonFlaskCount() == 0) {
+                ret += this + " use count has exceeded.";
+            }
+        }
+        return ret;
     }
-
-
 }

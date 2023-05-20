@@ -19,6 +19,8 @@ public enum Status {
     ENEMY,
     PLAYER,
     CONSUMABLE,  // for items
+    SELLABLE,
+    PURCHASEABLE,
     SKELETAL_TYPE, // HSS, Skeletal bandit
     DOG_TYPE,   // Lone wolf, Giant dog
     WATER_TYPE, // Giant crab, Giant crayfish

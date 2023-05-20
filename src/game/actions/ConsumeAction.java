@@ -6,12 +6,16 @@ import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.items.Consumable;
 import game.actors.Player;
+import game.items.CrimsonTears;
+import game.items.GoldenRunes;
+import game.rune.Rune;
 import game.utils.Status;
 
 /**
  * An action to consume Consumable items.
  * @see Action
  * @see Consumable
+ * @author Mustafa Khan
  */
 public class ConsumeAction extends Action {
     /**
@@ -36,20 +40,9 @@ public class ConsumeAction extends Action {
     @Override
     public String execute(Actor actor, GameMap map) {
         String retString = "";
-        Player player = (Player) actor;
         Consumable consumable = (Consumable) consumableItem;
+        retString += consumable.consumeItem(actor);
 
-        // check if player has the item
-        if (player.getItemInventory().contains(consumableItem)){
-            if (consumableItem.hasCapability(Status.CONSUMABLE) && player.getCrimsonFlaskCount() != 0){
-                player.heal(consumable.getHealAmount());
-                player.removeItemFromInventory(consumableItem);
-                player.decreaseCrimsonFlaskCount();
-                retString = consumableItem.toString() + " has been consumed.";
-            } else if (player.getCrimsonFlaskCount() == 0) {
-                return consumableItem.toString() + " use count has exceeded.";
-            }
-        }
         return retString;
     }
 

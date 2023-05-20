@@ -5,7 +5,7 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.utils.Status;
-import game.weapons.Sellable;
+import game.transactions.Sellable;
 import game.actors.Player;
 import game.actors.Trader;
 

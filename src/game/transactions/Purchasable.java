@@ -1,4 +1,4 @@
-package game.weapons;
+package game.transactions;
 
 import game.rune.Rune;
 

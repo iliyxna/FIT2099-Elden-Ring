@@ -10,10 +10,7 @@ import edu.monash.fit2099.engine.positions.Exit;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
-import game.actions.AttackAction;
-import game.actions.DespawnAction;
-import game.actions.ResetAction;
-import game.actions.UnsheatheAttackAction;
+import game.actions.*;
 import game.behaviours.AttackBehaviour;
 import game.behaviours.Behaviour;
 import game.behaviours.FollowBehaviour;
@@ -23,6 +20,7 @@ import game.reset.Resettable;
 import game.rune.Rune;
 import game.utils.RandomNumberGenerator;
 import game.utils.Status;
+import game.weapons.AstrologerStaff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +30,8 @@ import java.util.Map;
  * Abstract representing enemies. It implements the Resettable interface.
  * @see Actor
  * @see Resettable
+ * @author Damia
+ * Modified by: Iliyana, Mustafa
  */
 public abstract class Enemy extends Actor implements Resettable {
     /**
@@ -69,6 +69,8 @@ public abstract class Enemy extends Actor implements Resettable {
      */
     public Enemy(String name, char displayChar, int hitPoints, int minRuneValue, int maxRuneValue) {
         super(name, displayChar, hitPoints);
+        // add to list of resettables for game reset
+        ResetManager.getInstance().registerResettable(this);
         // rune value generated with random number generator
         enemyRuneValue = RandomNumberGenerator.getRandomInt(minRuneValue,maxRuneValue);
         this.addCapability(Status.ENEMY);
@@ -78,14 +80,12 @@ public abstract class Enemy extends Actor implements Resettable {
 
     /**
      * At each turn, select a valid action to perform.
-     *
      * @param actions    collection of possible Actions for this Actor
      * @param lastAction The Action this Actor took last turn. Can do interesting things in conjunction with Action.getNextAction()
      * @param map        the map containing the Actor
      * @param display    the I/O object to which messages may be written
      * @return the valid action that can be performed in that iteration or null if no valid action is found
      */
-
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
 
@@ -112,7 +112,6 @@ public abstract class Enemy extends Actor implements Resettable {
      * @param map        current GameMap
      * @return a list of actions that can be performed by actors that can use the console menu. (e.g. player)
      */
-
     @Override
     public ActionList allowableActions(Actor otherActor, String direction, GameMap map) {
         ActionList actions = new ActionList();
@@ -122,7 +121,6 @@ public abstract class Enemy extends Actor implements Resettable {
                 this.addBehaviour(998, new FollowBehaviour(otherActor));
                 isFollowingPlayer = true;
             }
-
             // Player can choose to attack with intrinsic weapon
             actions.add(new AttackAction(this, direction, otherActor.getIntrinsicWeapon()));
 
@@ -132,10 +130,12 @@ public abstract class Enemy extends Actor implements Resettable {
                 WeaponItem attackWeapon = otherActor.getWeaponInventory().get(0);
                 actions.add(new AttackAction(this, direction, attackWeapon));
                 // Some weapons have unique skills
+                // e.g. Unsheathe (Uchigatana), Quickstep (Great Knife)
                 if (attackWeapon.hasCapability(Status.UNIQUE_SKILL)) {
                     actions.add(attackWeapon.getSkill(this, direction));
                 }
             }
+
         }
         return actions;
     }
@@ -173,6 +173,17 @@ public abstract class Enemy extends Actor implements Resettable {
      */
     public Rune getEnemyRuneValue() {
         return new Rune(this.enemyRuneValue);
+    }
+
+    /**
+     * Setter method to set the enemy rune value.
+     */
+    public void setEnemyRuneValue(int enemyRuneValue) {
+        this.enemyRuneValue = enemyRuneValue;
+    }
+
+    public Map<Integer, Behaviour> getBehaviours() {
+        return behaviours;
     }
 
     /**

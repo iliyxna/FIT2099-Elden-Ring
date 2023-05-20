@@ -2,6 +2,8 @@ package game.weapons;
 
 import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.rune.Rune;
+import game.transactions.Purchasable;
+import game.transactions.Sellable;
 
 
 /**

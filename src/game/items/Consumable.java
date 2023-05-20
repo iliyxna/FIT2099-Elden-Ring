@@ -1,14 +1,19 @@
 package game.items;
 
+import edu.monash.fit2099.engine.actors.Actor;
+
 /**
  * A consumable interface.
+ * @author Mustafa Khan
+ * Modified by: Iliyana
  */
 public interface Consumable {
 
     /**
-     * Retrieve the healing amount of the consumable item.
-     * @return the healing amount of the consumable item.
+     * A method that contains the consequence of consuming the item.
+     * @param actor actor that consumes the consumable item.
+     * @return a string that represents the consumption of the item
      */
-    public int getHealAmount();
+    String consumeItem(Actor actor);
 
 }

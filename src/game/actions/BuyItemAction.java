@@ -5,7 +5,7 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import game.utils.Status;
-import game.weapons.Purchasable;
+import game.transactions.Purchasable;
 import game.actors.Player;
 
 /**
