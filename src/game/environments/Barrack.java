@@ -2,6 +2,7 @@ package game.environments;
 
 import edu.monash.fit2099.engine.positions.Ground;
 import edu.monash.fit2099.engine.positions.Location;
+import game.actors.GodrickSoldier;
 import game.utils.MapSize;
 
 /**
