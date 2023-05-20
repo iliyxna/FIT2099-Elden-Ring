@@ -26,5 +26,8 @@ public enum Status {
     WATER_TYPE, // Giant crab, Giant crayfish
     ENEMY_WEAPON_SKILL,
     UNIQUE_SKILL,
-    RANGED_ATTACK
+    RANGED_ATTACK,
+    DOG,
+    SC_CREATURES_TYPE, // Dog
+    GODRICK_SOLDIER
 }
