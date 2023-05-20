@@ -5,13 +5,10 @@ import edu.monash.fit2099.engine.actors.Actor;
 import edu.monash.fit2099.engine.positions.Exit;
 import edu.monash.fit2099.engine.positions.Ground;
 import edu.monash.fit2099.engine.positions.Location;
-import game.actions.RestAction;
 import game.actions.SummonAction;
 import game.actions.UpgradeHPAction;
 import game.actors.Ally;
-import game.actors.GodrickSoldier;
 import game.actors.Invader;
-import game.utils.MapSize;
 import game.utils.Status;
 
 /**

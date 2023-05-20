@@ -7,8 +7,6 @@ package game.utils;
  */
 public enum Status {
     HOSTILE_TO_ENEMY,
-    RESPAWNABLE,
-    RESTING,
     CAN_DESPAWN_WHEN_RESET, // For future implementation, new enemy added may not be able to be de-spawned
     HEAVY_SKELETAL_SWORDSMAN,
     GIANT_CRAB,
@@ -27,7 +25,11 @@ public enum Status {
     ENEMY_WEAPON_SKILL,
     UNIQUE_SKILL,
     RANGED_ATTACK,
+    DEMIGOD, // REQ3
     DOG,
     SC_CREATURES_TYPE, // Dog
-    GODRICK_SOLDIER
+    GODRICK_SOLDIER,
+    INVADER,
+    POISONED,
+    POISONOUS_ITEM
 }
