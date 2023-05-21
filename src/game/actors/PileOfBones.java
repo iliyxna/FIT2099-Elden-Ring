@@ -74,10 +74,10 @@ public class PileOfBones extends Actor implements Resettable {
             map.removeActor(this);
             if(this.previousEnemy.getClass() == HeavySkeletalSwordsman.class){
                 map.addActor(new HeavySkeletalSwordsman(), pos);
-                System.out.println("Heavy Skeletal Swordsman re-spawned.");
+                display.println("Heavy Skeletal Swordsman re-spawned.");
             }else{
                 map.addActor(new SkeletalBandit(), pos);
-                System.out.println("Skeletal Bandit re-spawned.");
+                display.println("Skeletal Bandit re-spawned.");
             }
 
         }

@@ -2,6 +2,7 @@
 package game.actions;
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.Exit;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
@@ -119,7 +120,7 @@ public class AreaAttackAction extends Action implements AreaAttack {
                         map.removeActor(target);
                         map.addActor(pileOfBones, pos);
                         pileOfBones.addWeaponToInventory(new Grossmesser());
-                        System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
+                        new Display().println("Heavy Skeletal Swordsman turns into Pile of Bones.");
                     } else if (target instanceof SkeletalBandit){
 
                         pileOfBones.setPreviousEnemy((Enemy)target);
@@ -127,7 +128,7 @@ public class AreaAttackAction extends Action implements AreaAttack {
                         map.removeActor(target);
                         map.addActor(pileOfBones, pos);
                         pileOfBones.addWeaponToInventory(new Scimitar());
-                        System.out.println("Skeletal Bandit turns into Pile of Bones.");
+                        new Display().println("Skeletal Bandit turns into Pile of Bones.");
                     }else{
                         result += new DeathAction(actor).execute(target, map);
                     }

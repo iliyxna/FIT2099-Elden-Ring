@@ -50,7 +50,7 @@ public class GodrickTheGrafted extends Demigod{
         this.setLastLocation(map.locationOf(this));
         // Phase 1 - hit points above 50% of max hp - attack with Axe of Godrick
         // Phase 2 - hit points below or equal to 50% of max hp - attack with Grafted Dragon
-        System.out.println(this.getWeaponInventory().get(0));
+        display.println(this.getWeaponInventory().get(0) + "");
 
         if (this.hitPoints <= this.maxHitPoints * 0.5){
             if (this.getWeaponInventory().get(0).getClass() == AxeOfGodrick.class){
@@ -86,7 +86,7 @@ public class GodrickTheGrafted extends Demigod{
             map.removeActor(this);
             map.moveActor(this, initialLocation); // initial position set in Application
             this.resetMaxHp(this.maxHitPoints);
-            System.out.println("Godrick the Grafted's HP reset to: " + this.hitPoints);
+            new Display().println("Godrick the Grafted's HP reset to: " + this.hitPoints);
         }
     }
 }

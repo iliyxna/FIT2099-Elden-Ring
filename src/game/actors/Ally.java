@@ -64,8 +64,6 @@ public class Ally extends Actor implements Resettable {
      */
     @Override
     public Action playTurn(ActionList actions, Action lastAction, GameMap map, Display display) {
-        System.out.println(this + "'s current HP: " + this.printHp());
-
         Location allyLocation = map.locationOf(this);
 
         for (Exit exit : allyLocation.getExits()) {

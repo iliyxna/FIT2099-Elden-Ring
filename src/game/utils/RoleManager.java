@@ -1,6 +1,7 @@
 package game.utils;
 
 import edu.monash.fit2099.engine.actors.Actor;
+import edu.monash.fit2099.engine.displays.Display;
 import game.weapons.AstrologerStaff;
 import game.weapons.Club;
 import game.weapons.GreatKnife;
@@ -40,12 +41,12 @@ public class RoleManager {
      * @return the choice of the player
      */
     public int menuItem() {
-        System.out.println("Please choose your starting class \uD83E\uDD3A️");
+        new Display().println("Please choose your starting class \uD83E\uDD3A️");
         Scanner sel = new Scanner(System.in);
-        System.out.println("1. Samurai Class (Starting weapon: Uchigatana, HP: 455)");
-        System.out.println("2. Bandit Class (Starting weapon: Great Knife, HP: 414)");
-        System.out.println("3. Wretch Class (Starting weapon: Club, HP: 414)");
-        System.out.println("4. Astrologer Class (Starting weapon: Astrologer's Staff, HP: 396)");
+        new Display().println("1. Samurai Class (Starting weapon: Uchigatana, HP: 455)");
+        new Display().println("2. Bandit Class (Starting weapon: Great Knife, HP: 414)");
+        new Display().println("3. Wretch Class (Starting weapon: Club, HP: 414)");
+        new Display().println("4. Astrologer Class (Starting weapon: Astrologer's Staff, HP: 396)");
         int choice = 0;
 
         boolean isValidChoice = false;
@@ -57,9 +58,9 @@ public class RoleManager {
                 }
                 isValidChoice = true;
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                new Display().println("Invalid input. Please enter a number between 1 and 4.");
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                new Display().println(e.getMessage());
             }
         }
         return choice;

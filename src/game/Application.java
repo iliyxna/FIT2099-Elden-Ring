@@ -136,10 +136,9 @@ public class Application {
 		// HINT: what does it mean to prefer composition to inheritance?
 		Player player = new Player();
 		world.addPlayer(player, limgrave.at(36, 11));
-		limgrave.at(38,8).addActor(new GiantCrab());
 
 		// Activate the first site of lost grace
-		Location TheFirstStep = new Location(limgrave,38,9);
+		Location TheFirstStep = limgrave.at(38,9);
 		limgrave.at(TheFirstStep.x(), TheFirstStep.y()).setGround(new SiteOfLostGrace());
 		player.setLastSiteOfLostGrace(TheFirstStep);
 		player.setMapOfLastLostGrace(limgrave);
