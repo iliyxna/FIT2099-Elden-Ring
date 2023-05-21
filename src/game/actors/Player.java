@@ -128,7 +128,6 @@ public class Player extends Actor implements Resettable{
 		this.addItemToInventory(new RawMeatDumpling());
 		this.addItemToInventory(new GoldenSeeds());
 
-		this.addItemToInventory(new RemembranceOfTheGrafted());
 		this.runeManager = RuneManager.getInstance();
 	}
 
