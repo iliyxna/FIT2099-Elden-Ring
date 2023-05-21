@@ -13,6 +13,11 @@ import game.utils.Status;
  */
 public class Cliff extends Ground {
     /**
+     * Damage dealt when player falls from cliff.
+     */
+    private final int CLIFF_DAMAGE = 5000;
+
+    /**
      * Constructor for Cliff.
      */
     public Cliff() {
@@ -39,7 +44,7 @@ public class Cliff extends Ground {
     public void tick(Location location) {
         if(location.containsAnActor() && location.getActor().hasCapability(Status.PLAYER)){
             Actor player = location.getActor();
-            location.getActor().hurt(5000);
+            location.getActor().hurt(CLIFF_DAMAGE);
 
             // Reset game when player dies
             player.addCapability(PlayerResetStatus.DIED);
