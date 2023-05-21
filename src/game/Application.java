@@ -2,7 +2,6 @@ package game;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import edu.monash.fit2099.engine.displays.Display;
 import edu.monash.fit2099.engine.positions.FancyGroundFactory;
@@ -195,6 +194,7 @@ public class Application {
 		stormveilCastle.at(10,15).addItem(new GoldenRunes());
 		stormveilCastle.at(36,21).addItem(new GoldenRunes());
 		stormveilCastle.at(60,17).addItem(new GoldenRunes());
+
 
 		world.run();
 	}
