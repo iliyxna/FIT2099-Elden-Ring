@@ -18,6 +18,9 @@ import game.utils.Status;
  * @author Damia
  */
 public class Grossmesser extends WeaponItem implements Sellable {
+    /**
+     * Grossmesser constructor
+     */
     public Grossmesser(){
         super("Grossmesser", '?', 115, "swings",85 );
         this.addCapability(Status.HEAVY_SKELETAL_SWORDSMAN);

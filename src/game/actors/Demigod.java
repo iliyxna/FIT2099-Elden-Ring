@@ -32,6 +32,11 @@ public abstract class Demigod extends Enemy{
         super(name, displayChar, hitPoints, 0, 0);
     }
 
+    /**
+     * Setter method to set the initial location
+     * @param initialLocation
+     */
+
     public void setInitialLocation(Location initialLocation) {
         this.initialLocation = initialLocation;
     }

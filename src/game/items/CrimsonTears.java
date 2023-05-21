@@ -24,6 +24,11 @@ public class CrimsonTears extends Item implements Consumable {
         this.addCapability(Status.CONSUMABLE);
     }
 
+    /**
+     * A method that contains the consequence of consuming a crimson tears.
+     * @param actor actor that consumes crimson tears.
+     * @return a string that represents the consumption a crimson tears.
+     */
     @Override
     public String consumeItem(Actor actor) {
         String ret = "";

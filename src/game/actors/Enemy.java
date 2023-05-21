@@ -178,6 +178,11 @@ public abstract class Enemy extends Actor implements Resettable {
         this.enemyRuneValue = enemyRuneValue;
     }
 
+    /**
+     * Getter method to get the behaviours of the enemy
+     * @return behaviours of the enemy
+     */
+
     public Map<Integer, Behaviour> getBehaviours() {
         return behaviours;
     }

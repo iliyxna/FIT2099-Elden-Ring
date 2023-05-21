@@ -17,6 +17,10 @@ import game.behaviours.Behaviour;
  *
  */
 public class WanderBehaviour implements Behaviour {
+
+	/**
+	 * Store random value
+	 */
 	
 	private final Random random = new Random();
 

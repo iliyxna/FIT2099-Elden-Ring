@@ -6,7 +6,7 @@ package game.utils;
  * Font: Georgia11
  * Created by:
  * @author Adrian Kristanto
- * Modified by:
+ * Modified by: Iliyana
  */
 public class FancyMessage {
     public static String ELDEN_RING =

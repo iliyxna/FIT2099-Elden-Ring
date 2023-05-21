@@ -20,6 +20,10 @@ import game.weapons.GraftedDragon;
  */
 public class GodrickTheGrafted extends Demigod{
 
+    /**
+     * Attribute to store the last location
+     */
+
     private Location lastLocation;
 
     /**
@@ -66,9 +70,18 @@ public class GodrickTheGrafted extends Demigod{
         return new DoNothingAction();
     }
 
+    /**
+     * A getter method to get the last location
+     * @return the last location
+     */
+
     public Location getLastLocation() {
         return lastLocation;
     }
+
+    /**
+     * A setter method to set the last location
+     */
 
     public void setLastLocation(Location lastLocation) {
         this.lastLocation = lastLocation;

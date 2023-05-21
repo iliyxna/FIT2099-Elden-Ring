@@ -40,6 +40,10 @@ import java.util.List;
  * @see Resettable
  */
 public class Player extends Actor implements Resettable{
+
+	/**
+	 * Attribute for the Menu
+	 */
 	private final Menu menu = new Menu();
 
 	/**
@@ -92,6 +96,10 @@ public class Player extends Actor implements Resettable{
 	 * For other classes to check if player is dead
 	 */
 	private static boolean isPlayerDead;
+
+	/**
+	 * Attribute for last poisonous item consumed by the player
+	 */
 
 	private Poisonous lastPoisonousItemConsumed;
 

@@ -13,7 +13,14 @@ import java.util.List;
  *
  */
 public class ResetManager {
+    /**
+     * List of resettables
+     */
     private List<Resettable> resettables;
+
+    /**
+     * Reset Manager instance
+     */
     private static ResetManager instance;
 
     /**
@@ -61,6 +68,11 @@ public class ResetManager {
     public void removeResettable(Resettable resettable) {
         this.resettables.remove(resettable);
     }
+
+    /**
+     * Getter method to get resettables
+     * @return list of resettables
+     */
 
     public List<Resettable> getResettables(){return this.resettables;}
 }

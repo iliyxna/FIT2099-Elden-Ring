@@ -36,6 +36,11 @@ public class Rune extends Item  {
         return runeValue;
     }
 
+    /**
+     * ToString method to return a string rune value
+     * @return string rune value
+     */
+
     @Override
     public String toString() {
         return runeValue + "";
