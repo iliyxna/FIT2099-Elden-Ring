@@ -26,8 +26,7 @@ public class GodrickTheGrafted extends Demigod{
      * Constructor for GodrickTheGrafted class.
      */
     public GodrickTheGrafted() {
-//        super("Godrick The Grafted", 'Y', 6080);
-        super("Godrick The Grafted", 'Y', 100);
+        super("Godrick The Grafted", 'Y', 6080);
         this.setEnemyRuneValue(20000);
         this.addCapability(Status.DEMIGOD);
         this.addWeaponToInventory(new AxeOfGodrick()); // weapon for phase 1

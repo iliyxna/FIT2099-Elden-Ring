@@ -10,6 +10,8 @@ import game.utils.MapSize;
 
 /**
  * Class representing the puddle of water class
+ * @see MapSize
+ * @author Damia
  */
 public class Water extends Ground {
     /**

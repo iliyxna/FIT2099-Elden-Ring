@@ -19,6 +19,7 @@ public class GoldenSeeds extends Item implements Consumable{
      */
     public GoldenSeeds() {
         super("Golden Seeds", ',', true);
+        this.addCapability(Status.CONSUMABLE);
     }
 
     /**

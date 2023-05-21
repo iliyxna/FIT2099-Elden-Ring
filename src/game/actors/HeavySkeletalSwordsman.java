@@ -7,6 +7,7 @@ import game.weapons.Grossmesser;
  * Class representing the Heavy skeletal swordsman.
  * HSS carries a Grossmesser at all times.
  * @see Enemy
+ * @author Damia
  */
 public class HeavySkeletalSwordsman extends Enemy {
 
@@ -16,10 +17,8 @@ public class HeavySkeletalSwordsman extends Enemy {
     public HeavySkeletalSwordsman() {
         super("Heavy Skeletal Swordsman", 'q',153,
                 35,892);
-
         // add Grossmesser to inventory
         this.addWeaponToInventory(new Grossmesser());
-
         this.addCapability(Status.HEAVY_SKELETAL_SWORDSMAN);
         this.addCapability(Status.SKELETAL_TYPE);
         this.setSelfType(Status.SKELETAL_TYPE);

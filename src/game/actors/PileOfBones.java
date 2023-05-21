@@ -10,6 +10,7 @@ import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actions.AttackAction;
 import game.actions.DespawnAction;
+import game.reset.ResetManager;
 import game.reset.Resettable;
 import game.utils.Status;
 import game.weapons.Grossmesser;
@@ -20,6 +21,9 @@ import game.weapons.Scimitar;
  * will turn into pile of bones after the hit point of the enemy is 0.
  * After 3 turns, if the pile of bones is not destroyed, it turns back
  * into the previous enemy.
+ * @see Actor
+ * @see Resettable
+ * @author Damia
  */
 public class PileOfBones extends Actor implements Resettable {
     /**
@@ -41,6 +45,8 @@ public class PileOfBones extends Actor implements Resettable {
      */
     public PileOfBones() {
         super("Pile of Bones",'X',1);
+        // add to list of resettables for game reset
+        ResetManager.getInstance().registerResettable(this);
         this.addCapability(Status.SKELETAL_TYPE);
         this.addCapability(Status.PILE_OF_BONES);
         this.addCapability(Status.CAN_DESPAWN_WHEN_RESET);

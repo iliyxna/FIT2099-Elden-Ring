@@ -136,7 +136,7 @@ public class Application {
 
 		// HINT: what does it mean to prefer composition to inheritance?
 		Player player = new Player();
-		world.addPlayer(player, limgrave.at(39, 9));
+		world.addPlayer(player, limgrave.at(36, 11));
 		limgrave.at(38,8).addActor(new GiantCrab());
 
 		// Activate the first site of lost grace
@@ -170,7 +170,31 @@ public class Application {
 		stormveilCastle.at(5,2).setGround(stormveilBossDoor);
 		stormveilBossDoor.addDestination("to Boss Room", bossRoom.at(1,1));	// Bossroom got no door
 
+		// Add Boss to Boss Room
+		GodrickTheGrafted GodrickBoss = new GodrickTheGrafted();
+		bossRoom.at(10,5).addActor(GodrickBoss);
+		GodrickBoss.setInitialLocation(bossRoom.at(10,5)); // set initial location of Godrick
 
+		// Add Traders into the game map.
+		MerchantKale merchantKale = new MerchantKale();
+		limgrave.at(38,11).addActor(merchantKale);
+
+		FingerReaderEnia fingerReaderEnia = new FingerReaderEnia();
+		limgrave.at(41,11).addActor(fingerReaderEnia);
+
+		// Randomly scattering golden runes around Limgrave & Stormveil castle
+		limgrave.at(59,2).addItem(new GoldenRunes());
+		limgrave.at(4,3).addItem(new GoldenRunes());
+		limgrave.at(10,13).addItem(new GoldenRunes());
+		limgrave.at(67,15).addItem(new GoldenRunes());
+		limgrave.at(42,20).addItem(new GoldenRunes());
+		limgrave.at(39,14).addItem(new GoldenRunes()); // add one near player
+
+		stormveilCastle.at(8,1).addItem(new GoldenRunes());
+		stormveilCastle.at(53,2).addItem(new GoldenRunes());
+		stormveilCastle.at(10,15).addItem(new GoldenRunes());
+		stormveilCastle.at(36,21).addItem(new GoldenRunes());
+		stormveilCastle.at(60,17).addItem(new GoldenRunes());
 
 		world.run();
 	}

@@ -5,6 +5,7 @@ import game.utils.Status;
 /**
  * Class representing the Giant Crab.
  * @see Enemy
+ * @author Damia
  */
 public class GiantCrab extends Enemy {
 

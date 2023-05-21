@@ -4,14 +4,11 @@ import java.util.Random;
 
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
-import edu.monash.fit2099.engine.items.DropAction;
-import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import game.actors.*;
-import game.reset.Resettable;
-import game.rune.Rune;
+import game.utils.PlayerResetStatus;
 import game.utils.Status;
 import game.weapons.Grossmesser;
 import game.weapons.Scimitar;
@@ -20,7 +17,7 @@ import game.weapons.Scimitar;
  * An Action to attack another Actor.
  * Created by:
  * @author Adrian Kristanto
- * Modified by:
+ * Modified by: Damia, Iliyana
  *
  */
 public class AttackAction extends Action {
@@ -79,67 +76,13 @@ public class AttackAction extends Action {
 	 */
 	@Override
 	public String execute(Actor actor, GameMap map) {
+		String result = "";
 		if (weapon == null) {
 			weapon = actor.getIntrinsicWeapon();
 		}
 
-		if (!(rand.nextInt(100) <= weapon.chanceToHit())) {
-			return actor + " misses " + target + ".";
-		}
-
 		int damage = weapon.damage();
-		String result = actor + " " + weapon.verb() + " " + target + " for " + damage + " damage.";
-		target.hurt(damage);
-
-		// DEALS WITH PLAYER'S DEATH
-		if (target.hasCapability(Status.PLAYER)){
-			Player player = (Player) target;
-			if (!target.isConscious()){
-				// Retrieve the location before player died.
-				Location dropLocation;
-				if (player.getMovementList().size() <= 1){
-					dropLocation = map.locationOf(player);
-				} else {
-					dropLocation = player.getMovementList().get(player.getMovementList().size()-2);
-				}
-				Rune playerRune = player.getRuneManager().getTotalRunes();
-				// Use this instead of drop action because we want to drop at the previous location.
-				player.getRuneManager().removeRunes();
-				map.at(dropLocation.x(),dropLocation.y()).addItem(playerRune);
-
-				// Reset game when player dies
-				ResetAction resetAction = new ResetAction();
-				result += resetAction.execute(player,map);
-				result += "Value of runes dropped: $" + playerRune.getRuneValue();
-
-				return result;
-			}
-		}
-
-		// Deals with unconscious actors
-		else if (!target.isConscious()) {
-			// Deals with spawning and de-spawning of skeletal types.
-			// Pile of bones to be added to map
-			PileOfBones pileOfBones = new PileOfBones();
-			if (target instanceof HeavySkeletalSwordsman) {
-				pileOfBones.setPreviousEnemy((Enemy)target);
-				Location pos = map.locationOf(target);
-				map.removeActor(target);
-				map.addActor(pileOfBones, pos);
-				pileOfBones.addWeaponToInventory(new Grossmesser());
-				System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
-			} else if (target instanceof SkeletalBandit){
-
-				pileOfBones.setPreviousEnemy((Enemy)target);
-				Location pos = map.locationOf(target);
-				map.removeActor(target);
-				map.addActor(pileOfBones, pos);
-				pileOfBones.addWeaponToInventory(new Scimitar());
-				System.out.println("Skeletal Bandit turns into Pile of Bones.");
-			}else{
-				result += new DeathAction(actor).execute(target, map);
-			}
-		}
+		result += attackSequence(actor, map, damage);
 		return result;
 	}
 
@@ -200,5 +143,83 @@ public class AttackAction extends Action {
 	 */
 	public void setDirection(String direction) {
 		this.direction = direction;
+	}
+
+	public String hurtActor(Actor attacker, int damage){
+
+		if (!(rand.nextInt(100) <= weapon.chanceToHit())) {
+			return attacker + " misses " + target + ".";
+		}
+
+		target.hurt(damage);
+		return attacker + " " + weapon.verb() + " " + target + " for " + damage + " damage.";
+	}
+
+	/**
+	 * A method to check if player is dead. If player is dead, the reset action will be called
+	 * to be executed.
+	 * @param map GameMap the player is on.
+	 * @return a string representing the death of player.
+	 */
+	public String checkPlayerDeath(GameMap map){
+		String result = "";
+		if (target.hasCapability(Status.PLAYER)){
+			Player player = (Player) target;
+			if (!target.isConscious()) {
+				// Reset game when player dies
+				player.addCapability(PlayerResetStatus.DIED);
+				ResetAction resetAction = new ResetAction();
+				result += resetAction.execute(player, map);
+//                        result += "Value of runes dropped: $" + playerRune.getRuneValue();
+			}
+		}
+		return result;
+	}
+
+	public String checkEnemyDeath(Actor attacker, GameMap map){
+		String result = "";
+		if (!target.isConscious()) {
+			// Deals with spawning and de-spawning of skeletal types.
+			// Pile of bones to be added to map
+			PileOfBones pileOfBones = new PileOfBones();
+			if (target instanceof HeavySkeletalSwordsman) {
+				pileOfBones.setPreviousEnemy((Enemy)target);
+				Location pos = map.locationOf(target);
+				map.removeActor(target);
+				map.addActor(pileOfBones, pos);
+				pileOfBones.addWeaponToInventory(new Grossmesser());
+				System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
+			} else if (target instanceof SkeletalBandit){
+				pileOfBones.setPreviousEnemy((Enemy)target);
+				Location pos = map.locationOf(target);
+				map.removeActor(target);
+				map.addActor(pileOfBones, pos);
+				pileOfBones.addWeaponToInventory(new Scimitar());
+				System.out.println("Skeletal Bandit turns into Pile of Bones.");
+			}else{
+				result += new DeathAction(attacker).execute(target, map) ;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * After hurting the actor, check deaths of actor:
+	 * 1. if the actor is a player, drop runes at previous location and execute ResetAction.
+	 * 2. if the actor is an enemy, deal with the pile of bones to check previous enemy to know which
+	 * item to drop
+	 * @param attacker actor that is performing attack action
+	 * @param map game map the actor is on
+	 * @param damage damage to the attack
+	 * @return description of the consequences of the attack
+	 */
+	public String attackSequence(Actor attacker, GameMap map, int damage){
+		String result = "";
+
+		result += hurtActor(attacker, damage);
+		result += checkPlayerDeath(map);
+		result += checkEnemyDeath(attacker,map);
+
+		return result;
 	}
 }

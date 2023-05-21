@@ -7,6 +7,8 @@ import game.utils.MapSize;
 
 /**
  * Class representing the gust of wind class.
+ * @see MapSize
+ * @author Damia
  */
 public class Wind extends Ground {
 

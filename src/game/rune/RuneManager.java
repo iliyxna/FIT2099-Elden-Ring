@@ -4,13 +4,14 @@ package game.rune;
  * A singleton RuneManager class that manages the runes of a player.
  * @version 1.0
  * @see Rune
+ * @author Iliyana
  */
 public class RuneManager {
 
     /**
      * Total value of runes a player currently holds.
      */
-    private int totalRunes = 100;
+    private Rune totalRunes = new Rune(100);
 
     /**
      * A singleton rune manager instance.
@@ -38,7 +39,7 @@ public class RuneManager {
      * @return total runes owned by player
      */
     public Rune getTotalRunes() {
-        return new Rune(totalRunes);
+        return totalRunes;
     }
 
     /**
@@ -46,7 +47,7 @@ public class RuneManager {
      * @param totalRunes the total runes owned by player
      */
     public void setTotalRunes(int totalRunes) {
-        this.totalRunes = totalRunes;
+        this.totalRunes = new Rune (totalRunes);
     }
 
     /**
@@ -55,7 +56,7 @@ public class RuneManager {
      */
 
     public void addRunes(int value){
-        int newValue = totalRunes + value;
+        int newValue = totalRunes.getRuneValue() + value;
         setTotalRunes(newValue);
     }
 
@@ -64,7 +65,7 @@ public class RuneManager {
      * @param value
      */
     public void subtractRunes(int value){
-        int newValue = totalRunes - value;
+        int newValue = totalRunes.getRuneValue() - value;
         setTotalRunes(newValue);
     }
 

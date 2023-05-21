@@ -47,13 +47,12 @@ public class RawMeatDumpling extends Item implements Consumable, Poisonous{
      */
     @Override
     public String consumeItem(Actor actor) {
-
         if (actor.hasCapability(Status.PLAYER)){
             ((Player)actor).setLastPoisonousItemConsumed(this);
         }
         actor.heal(HEAL_AMOUNT);
-        actor.addCapability(Status.POISONED);
         inflictDamage(actor);
+        actor.addCapability(Status.POISONED);
         actor.removeItemFromInventory(this);
         return "Raw meat dumpling has been consumed. HP increased by 75, Poison status inflicted.";
     }

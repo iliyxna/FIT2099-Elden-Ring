@@ -17,6 +17,7 @@ import java.util.Random;
  * An action to perform the Unsheathe unique skill.
  * This is the unique skill of the Uchigatana weapon.
  * @see AttackAction
+ * @author Iliyana
  */
 public class UnsheatheAttackAction extends AttackAction{
 
@@ -44,38 +45,18 @@ public class UnsheatheAttackAction extends AttackAction{
      */
     @Override
     public String execute(Actor actor, GameMap map) {
+        String result = "";
         if (!(rand.nextInt(100) <= 60)) {
             return actor + " misses " + this.getTarget() + ".";
         }
 
         // Unsheathe deals 2x damage
         int damage = 2 * this.getWeapon().damage();
-        String result = actor + " " + this.getWeapon().verb() + " " + this.getTarget() + " for " + damage + " damage.";
-        this.getTarget().hurt(damage);
-        // Deals with unconscious actors
-        if (!this.getTarget().isConscious()) {
-            // Deals with spawning and de-spawning of skeletal types.
-            // Pile of bones to be added to map
-            PileOfBones pileOfBones = new PileOfBones();
-            if (this.getTarget() instanceof HeavySkeletalSwordsman) {
-                pileOfBones.setPreviousEnemy((Enemy)this.getTarget());
-                Location pos = map.locationOf(this.getTarget());
-                map.removeActor(this.getTarget());
-                map.addActor(pileOfBones, pos);
-                pileOfBones.addWeaponToInventory(new Grossmesser());
-                System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
-            } else if (this.getTarget() instanceof SkeletalBandit){
+//        String result = actor + " " + this.getWeapon().verb() + " " + this.getTarget() + " for " + damage + " damage.";
+//        this.getTarget().hurt(damage);
 
-                pileOfBones.setPreviousEnemy((Enemy)this.getTarget());
-                Location pos = map.locationOf(this.getTarget());
-                map.removeActor(this.getTarget());
-                map.addActor(pileOfBones, pos);
-                pileOfBones.addWeaponToInventory(new Scimitar());
-                System.out.println("Skeletal Bandit turns into Pile of Bones.");
-            }else{
-                result += new DeathAction(actor).execute(this.getTarget(), map);
-            }
-        }
+        result += attackSequence(actor, map, damage);
+
         return result;
     }
 

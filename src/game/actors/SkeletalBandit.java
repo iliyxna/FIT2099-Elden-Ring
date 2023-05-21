@@ -1,8 +1,15 @@
 package game.actors;
 
+import game.actions.BuyWeaponAction;
+import game.actions.SellWeaponAction;
 import game.utils.Status;
 import game.weapons.Scimitar;
 
+/**
+ * A class that represents the Skeletal Bandit.
+ * @see Enemy
+ * @author Damia
+ */
 public class SkeletalBandit extends Enemy{
 
     /**

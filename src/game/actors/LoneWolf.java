@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * Created by:
  * @author Adrian Kristanto
- * Modified by:
+ * Modified by: Damia
  *
  */
 public class LoneWolf extends Enemy {

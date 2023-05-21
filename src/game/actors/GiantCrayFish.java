@@ -3,6 +3,11 @@ package game.actors;
 import edu.monash.fit2099.engine.weapons.IntrinsicWeapon;
 import game.utils.Status;
 
+/**
+ * Class representing the Giant Cray Fish.
+ * @see Enemy
+ * @author Damia
+ */
 public class GiantCrayFish extends Enemy{
 
     /**

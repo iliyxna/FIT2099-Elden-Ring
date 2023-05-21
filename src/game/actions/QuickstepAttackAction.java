@@ -18,6 +18,7 @@ import java.util.Random;
  * An action to perform the Quickstep unique skill.
  * This is the unique skill of the Great Knife weapon.
  * @see AttackAction
+ * @author Iliyana
  */
 public class QuickstepAttackAction extends AttackAction{
     /**
@@ -44,14 +45,17 @@ public class QuickstepAttackAction extends AttackAction{
      */
     @Override
     public String execute(Actor actor, GameMap map) {
+        String result = "";
         if (!(rand.nextInt(100) <= 60)) {
             return actor + " misses " + this.getTarget() + ".";
         }
 
-        // Quickstep action allows user to deal normal damage, and move away from the enemy to evade their attack.
-        int damage = this.getWeapon().damage();
-        String result = actor + " " + this.getWeapon().verb() + " " + this.getTarget() + " for " + damage + " damage.";
-        this.getTarget().hurt(damage);
+//        // Quickstep action allows user to deal normal damage, and move away from the enemy to evade their attack.
+//        int damage = this.getWeapon().damage();
+//        String result = actor + " " + this.getWeapon().verb() + " " + this.getTarget() + " for " + damage + " damage.";
+//        this.getTarget().hurt(damage);
+
+        result += attackSequence(actor, map, this.getWeapon().damage());
 
         // Move away from target to prevent being attacked if the location does not contain an actor
         for (Exit exit: map.locationOf(actor).getExits()){
@@ -61,30 +65,6 @@ public class QuickstepAttackAction extends AttackAction{
             }
         }
 
-        // Deals with unconscious actors
-        if (!this.getTarget().isConscious()) {
-            // Deals with spawning and de-spawning of skeletal types.
-            // Pile of bones to be added to map
-            PileOfBones pileOfBones = new PileOfBones();
-            if (this.getTarget() instanceof HeavySkeletalSwordsman) {
-                pileOfBones.setPreviousEnemy((Enemy)this.getTarget());
-                Location pos = map.locationOf(this.getTarget());
-                map.removeActor(this.getTarget());
-                map.addActor(pileOfBones, pos);
-                pileOfBones.addWeaponToInventory(new Grossmesser());
-                System.out.println("Heavy Skeletal Swordsman turns into Pile of Bones.");
-            } else if (this.getTarget() instanceof SkeletalBandit){
-
-                pileOfBones.setPreviousEnemy((Enemy)this.getTarget());
-                Location pos = map.locationOf(this.getTarget());
-                map.removeActor(this.getTarget());
-                map.addActor(pileOfBones, pos);
-                pileOfBones.addWeaponToInventory(new Scimitar());
-                System.out.println("Skeletal Bandit turns into Pile of Bones.");
-            }else{
-                result += new DeathAction(actor).execute(this.getTarget(), map);
-            }
-        }
         return result;
     }
 
@@ -95,6 +75,6 @@ public class QuickstepAttackAction extends AttackAction{
      */
     @Override
     public String menuDescription(Actor actor) {
-        return actor + " performs Unsheathe Skill to " + this.getTarget() + " at " + this.getDirection() + " with " + this.getWeapon() ;
+        return actor + " performs Quickstep Skill to " + this.getTarget() + " at " + this.getDirection() + " with " + this.getWeapon() ;
     }
 }

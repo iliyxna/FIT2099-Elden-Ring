@@ -11,6 +11,7 @@ import game.reset.Resettable;
 /**
  * Rune class that represents the currency used in this game.
  * @see Item
+ * @author Iliyana
  */
 public class Rune extends Item  {
     /**
@@ -24,14 +25,6 @@ public class Rune extends Item  {
      */
     public Rune(int runeValue) {
         super("Rune", '$', true);
-        this.runeValue = runeValue;
-    }
-
-    /**
-     * Setter method to set rune value
-     * @param runeValue value of rune
-     */
-    public void setRuneValue(int runeValue) {
         this.runeValue = runeValue;
     }
 

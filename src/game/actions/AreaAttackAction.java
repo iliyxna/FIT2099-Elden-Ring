@@ -2,15 +2,13 @@
 package game.actions;
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
-import edu.monash.fit2099.engine.items.DropAction;
-import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.Exit;
 import edu.monash.fit2099.engine.positions.GameMap;
 import edu.monash.fit2099.engine.positions.Location;
 import edu.monash.fit2099.engine.weapons.Weapon;
 import edu.monash.fit2099.engine.weapons.WeaponItem;
 import game.actors.*;
-import game.rune.Rune;
+import game.utils.PlayerResetStatus;
 import game.utils.Status;
 import game.weapons.Grossmesser;
 import game.weapons.Scimitar;
@@ -21,6 +19,7 @@ import java.util.Random;
 
 /**
  * An action to attack other actors at the attacker's surroundings.
+ * @author Damia
  * @see Action
  * @see AreaAttack
  */
@@ -99,22 +98,11 @@ public class AreaAttackAction extends Action implements AreaAttack {
                 if (target.hasCapability(Status.PLAYER)){
                     Player player = (Player) target;
                     if (!target.isConscious()){
-                        // Retrieve the location before player died.
-                        Location dropLocation;
-                        if (player.getMovementList().size() <= 1){
-                            dropLocation = map.locationOf(player);
-                        } else {
-                            dropLocation = player.getMovementList().get(player.getMovementList().size()-2);
-                        }
-                        Rune playerRune = player.getRuneManager().getTotalRunes();
-                        // Use this instead of drop action because we want to drop at the previous location.
-                        player.getRuneManager().removeRunes();
-                        map.at(dropLocation.x(),dropLocation.y()).addItem(playerRune);
-
                         // Reset game when player dies
+                        player.addCapability(PlayerResetStatus.DIED);
                         ResetAction resetAction = new ResetAction();
                         result += resetAction.execute(player,map);
-                        result += "Value of runes dropped: $" + playerRune.getRuneValue();
+//                        result += "Value of runes dropped: $" + playerRune.getRuneValue();
 
                         return result;
                     }

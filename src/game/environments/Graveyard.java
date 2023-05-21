@@ -9,6 +9,8 @@ import game.utils.MapSize;
 
 /**
  * Class representing the graveyard.
+ * @see MapSize
+ * @author Damia
  */
 public class Graveyard extends Ground {
 

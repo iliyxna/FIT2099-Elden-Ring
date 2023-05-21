@@ -15,6 +15,7 @@ import game.utils.Status;
  * A class that figures out an Attack action that will be invoked by the actor (used for enemies).
  * @see AttackAction
  * @see AreaAttackAction
+ * @author Damia, Iliyana
  */
 public class AttackBehaviour implements Behaviour {
 
@@ -52,16 +53,38 @@ public class AttackBehaviour implements Behaviour {
                         return new AreaAttackAction();
                     }
 
-                    // For weapon skills (Grossmesser, Scimitar)
-                    if (actor.getWeaponInventory().size() != 0){
-                        weapon = actor.getWeaponInventory().get(0);
-                        // Both Grossmesser and Scimitar users have 50% chance of casting Spinning attack
-                        if (weapon.hasCapability(Status.ENEMY_WEAPON_SKILL) && !target.hasCapability(Status.SKELETAL_TYPE)){
-                            return weapon.getSkill(destination.getActor(), destination.toString());
+                    // AOE Attack for Skeletal types (HSS, Skeletal bandit)
+                    if (actor.hasCapability(Status.SKELETAL_TYPE)){
+                        if (actor.getWeaponInventory().size() != 0){
+                            weapon = actor.getWeaponInventory().get(0);
+                            // Both Grossmesser and Scimitar users have 50% chance of casting Spinning attack
+                            if (weapon.hasCapability(Status.ENEMY_WEAPON_SKILL) && !target.hasCapability(Status.SKELETAL_TYPE)){
+                                return weapon.getSkill(destination.getActor(), destination.toString());
+                            }
                         }
+                    }
 
+                    // AOE Attack for DEMIGOD
+                    if (actor.hasCapability(Status.DEMIGOD)){
+                        if (actor.getWeaponInventory().size() != 0){
+                            weapon = actor.getWeaponInventory().get(0);
+                            // Both Grafted dragon and Axe of godrick can cast AOE attack
+                            if (weapon.hasCapability(Status.ENEMY_WEAPON_SKILL)){
+                                return weapon.getSkill(destination.getActor(), destination.toString());
+                            }
+                        }
+                    }
+
+                    if (actor.hasCapability(Status.INVADER)){
+                        if (actor.getWeaponInventory().size() != 0){
+                            weapon = actor.getWeaponInventory().get(0);
+                            if (weapon.hasCapability(Status.UNIQUE_SKILL)){
+                                return weapon.getSkill(destination.getActor(), destination.toString());
+                            }
+                        }
                     }
                 }
+
                 // Here onwards are all normal attacks.
                 // When the target is a Player
                 if (target.hasCapability(Status.HOSTILE_TO_ENEMY)) {

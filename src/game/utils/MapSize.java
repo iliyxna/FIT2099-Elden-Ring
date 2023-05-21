@@ -9,6 +9,7 @@ import edu.monash.fit2099.engine.positions.GameMap;
  * @see game.environments.Graveyard
  * @see game.environments.Wind
  * @see game.environments.Water
+ * @author Damia
  */
 public class MapSize {
 
@@ -41,8 +42,8 @@ public class MapSize {
      */
     public static int getHorizontalSize(){
         if(playerMap != null){
-           x =  playerMap.getXRange().min() + playerMap.getXRange().max();
+            x =  playerMap.getXRange().min() + playerMap.getXRange().max();
         }
-       return x;
+        return x;
     }
 }

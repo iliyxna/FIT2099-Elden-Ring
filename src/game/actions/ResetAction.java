@@ -2,20 +2,21 @@ package game.actions;
 
 import edu.monash.fit2099.engine.actions.Action;
 import edu.monash.fit2099.engine.actors.Actor;
-import edu.monash.fit2099.engine.actors.ActorLocationsIterator;
 import edu.monash.fit2099.engine.items.Item;
 import edu.monash.fit2099.engine.positions.GameMap;
-import edu.monash.fit2099.engine.positions.Location;
-import edu.monash.fit2099.engine.positions.NumberRange;
 import game.actors.Player;
 import game.reset.ResetManager;
 import game.reset.Resettable;
 import game.rune.Rune;
-import game.utils.Status;
+import game.utils.PlayerResetStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An action to reset the state of the game.
  * @see Action
+ * @author Mustafa Khan
  */
 public class ResetAction extends Action {
     /**
@@ -37,50 +38,40 @@ public class ResetAction extends Action {
     @Override
     public String execute(Actor actor, GameMap map) {
         String res = "";
+        List<Resettable> tempResettableList = new ArrayList<>();
 
-        Player player = (Player) actor;
-        // Add player to resettables list
-        resetManager.registerResettable((Resettable) actor);
-
-        if (!player.isConscious()){
+        // When player DIES
+        if (actor.hasCapability(PlayerResetStatus.DIED)){
             res += "YOU DIED.\nGAME IS BEING RESET.\n";
-            map.removeActor(player);
-            map.at(player.getLastSiteOfLostGrace().x(),player.getLastSiteOfLostGrace().y()).addActor(player);
-
-            // To remove the runes that are left on the map when the player dies.
-            if (player.getPreviousRuneLocation() != null){
-                for (Item item : player.getPreviousRuneLocation().getItems()){
+            map.removeActor(actor);
+            (((Player)actor).getMapOfLastLostGrace()).at(((Player)actor).getLastSiteOfLostGrace().x(),((Player)actor).getLastSiteOfLostGrace().y()).addActor(actor);
+            Player.setIsPlayerDead(true);
+            actor.removeCapability(PlayerResetStatus.DIED);
+            if (((Player)actor).getPreviousRuneLocation() != null){
+                for (Item item : ((Player)actor).getPreviousRuneLocation().getItems()) {
                     if (item.getClass() == Rune.class) {
-                        map.at(player.getPreviousRuneLocation().x(), player.getPreviousRuneLocation().y()).removeItem(item);
+                        (((Player) actor).getMapOfPreviousRune()).at(((Player) actor).getPreviousRuneLocation().x(), ((Player) actor).getPreviousRuneLocation().y()).removeItem(item);
                         break;
                     }
                 }
             }
+        }
 
-        } else {
+        // When player RESTS
+        else if (actor.hasCapability(PlayerResetStatus.RESTING)){
             res += "GAME IS BEING RESET.\n";
             res += actor + " is resting at Site of Lost Grace\n";
         }
 
-        // Iterate through the whole gameMap to find the other actors (enemies)
-        for (int x : map.getXRange()){
-            for (int y : map.getYRange()){
-                // check every location if it contains an enemy
-                Location checkLocation = map.at(x,y);
-                if (map.isAnActorAt(checkLocation)){
-                    // if there is an enemy at the current location, check if that enemy is respawnable
-                    Actor actorAtLocation = map.getActorAt(checkLocation);
-                    if (actorAtLocation.hasCapability(Status.CAN_DESPAWN_WHEN_RESET)){
-                        resetManager.registerResettable((Resettable) actorAtLocation);
-                    }
-                }
-            }
-        }
         // this will loop through the resettables list and execute their respective reset() methods
         resetManager.run(map);
 
-        res += actor + " has recovered full HP by resting\n";
-        res += "Maximum uses of Crimson Flask has been reset to " + player.getCrimsonFlaskCount() +"\n";
+        // set back to false after resetting.
+        Player.setIsPlayerDead(false);
+        // Add back player into list of resettables after reset.
+        resetManager.registerResettable((Resettable) actor);
+
+        res += "Maximum uses of Crimson Flask has been reset\n";
         res += "All enemies have been de-spawned\n";
         return res;
     }

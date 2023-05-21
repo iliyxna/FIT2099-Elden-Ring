@@ -13,6 +13,7 @@ import game.utils.Status;
 /**
  * An action executed when runes are retrieved.
  * @see PickUpItemAction
+ * @author Mustafa Khan
  */
 public class RecoverRunesAction extends PickUpItemAction {
     /**
